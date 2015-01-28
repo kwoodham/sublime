@@ -17,7 +17,7 @@ I am in favor of using a file system hierarchy for a wiki rather than a "flat" d
 ## Script summary
 
 | Script                        | Purpose                                                    |
-| --                            | --                                                         |
+| ----------------------------- | ---------------------------------------------------------- |
 | `new_year.py`                 | Generate a year index file with links to each week         |
 | `wiki_template.py`            | Populate a week's page with day headers, etc...            |
 | `form_index.py`               | Paste in a road-map to navigate back up the wiki structure |
