@@ -21,13 +21,13 @@ I am in favor of using a file system hierarchy for a wiki rather than a "flat" d
 | `new_year.py`                 | Generate a year index file with links to each week         |
 | `wiki_template.py`            | Populate a week's page with day headers, etc...            |
 | `form_index.py`               | Paste in a road-map to navigate back up the wiki structure |
-| `index_check.py`              | Check for bad links, widows (missing links), and           |
-|                               | orphans (unreferenced files)                               |
+| `index_check.py`              | Check for bad links, widows and orphans                    |
 | `IndexCheck.sublime-settings` | Configuration file for index check                         |
 | `OpenInApp.sublime-settings`  | purpose                                                    |
 | `link_to_heading.py`          | purpose                                                    |
 | `open_in_app.py`              | purpose                                                    |
 | `open_link_under_cursor.py`   | purpose                                                    |
+| `toc_jump.py`                 | Show list of headings in view - select to center           |
 | `paste_wiki_link.py`          | purpose                                                    |
 | `pop_date.py`                 | purpose                                                    |
 | `show_instances.py`           | purpose                                                    |
