@@ -4,7 +4,7 @@ import datetime
 
 
 class GotoTodayCommand(sublime_plugin.TextCommand):
-    newView = int(0)
+    newView = ()
 
     def run(self, edit):
         # root_dir is root of journal WRT project root. Assumes year
@@ -30,18 +30,16 @@ class GotoTodayCommand(sublime_plugin.TextCommand):
         if isView:
             self.view.window().focus_view(isView)
             GotoTodayCommand.newView = isView
-            center_today(GotoTodayCommand.newView)
+            GotoTodayCommand.center_today(GotoTodayCommand.newView)
         else:
             GotoTodayCommand.newView = self.view.window().open_file(outStr)
 
+    class EventListener(sublime_plugin.EventListener):
 
-class EventListener(sublime_plugin.EventListener):
+        def on_load_async(self, view):
+            GotoTodayCommand.center_today(GotoTodayCommand.newView)
 
-    def on_load_async(self, view):
-        center_today(GotoTodayCommand.newView)
-
-
-def center_today(view):
-    a = "## " + datetime.date.today().strftime("%A, %B %d, %Y")
-    b = view.find(a, 0)
-    view.show_at_center(b)
+    def center_today(view):
+        a = "## " + datetime.date.today().strftime("%A, %B %d, %Y")
+        b = view.find(a, 0)
+        view.show_at_center(b)

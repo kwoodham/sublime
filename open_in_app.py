@@ -12,7 +12,7 @@ class OpenInAppCommand(sublime_plugin.TextCommand):
         arg_list = settings.get('arg_list', [])
         app_list = settings.get('app_list', [])
 
-        # Get the path/file (always relative to view) that
+        # Get the path/file (path always relative to view) that
         # the cursor is in
         sel = self.view.sel()[0]
         text = self.view.substr(self.view.line(sel))

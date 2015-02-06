@@ -30,7 +30,7 @@ class ShowInstancesCommand(sublime_plugin.TextCommand):
         if index == -1:
             return
         self.lineNumb = self.matrix[index][0]
-        self.fileName = self.matrix[index][1]
+        self.fileName = self.matrix[index][2] # need to include path
         ShowInstancesCommand.newView = self.view.window().open_file(self.fileName)
         self.center_text(ShowInstancesCommand.newView)
 
