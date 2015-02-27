@@ -78,7 +78,7 @@ class IndexCheckCommand(sublime_plugin.TextCommand):
                 files_loc.append(b[1])
 
         for a in ignore_exts:
-            print(a)
+            print('ignored extension: '+a)
 
         for a in files_rel:
             print('file is: '+a)
