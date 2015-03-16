@@ -1,0 +1,102 @@
+[
+	{"id": "side-bar-files-open-with",
+		"children":
+		[
+			// I have captions turned off - uncomment to turn on
+			//application 1
+			{
+				"caption": "Photoshop",
+				"id": "side-bar-files-open-with-photoshop",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "Adobe Photoshop CS5.app", // OSX
+									"extensions":"psd|png|jpg|jpeg"  //any file with these extensions
+								}
+			},
+
+			{
+				"caption": "Adobe Reader",
+				"id": "side-bar-files-open-with-adobe",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "C:\\Program Files (x86)\\Adobe\\Reader 11.0\\Reader\\AcroRd32.exe",
+									"extensions":"pdf"
+								}
+			},
+
+			//separator
+			{"caption":"Office"},
+
+			{
+				"caption": "Word",
+				"id": "side-bar-files-open-with-word",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "C:\\Program Files (x86)\\Microsoft Office\\Office15\\WINWORD.EXE",
+									"extensions":"doc|docx"
+								}
+			},
+
+			{
+				"caption": "Excel",
+				"id": "side-bar-files-open-with-excel",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "C:\\Program Files (x86)\\Microsoft Office\\Office15\\EXCEL.EXE",
+									"extensions":"xls|xlsx"
+								}
+			},
+
+			{
+				"caption": "Powerpoint",
+				"id": "side-bar-files-open-with-powerpoint",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "C:\\Program Files (x86)\\Microsoft Office\\Office15\\POWERPNT.EXE",
+									"extensions":"ppt|pptx"
+								}
+			},
+
+			{
+				"caption": "Outlook",
+				"id": "side-bar-files-open-with-outlook",
+				// http://office.microsoft.com/en-001/outlook-help/
+				// command-line-switches-for-microsoft-office-outlook-2007-HP001218589.aspx
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "C:\\Program Files (x86)\\Microsoft Office\\Office15\\OUTLOOK.EXE",
+									"extensions":"msg",
+									"args":["/f"]
+								}
+			},
+
+			//separator
+			{"caption":"LibreOffice"},
+
+			{
+				"caption": "Writer",
+				"id": "side-bar-files-open-with-writer",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "C:\\Program Files (x86)\\LibreOffice 4\\program\\swriter.exe",
+									"extensions":"odt"
+								}
+			},
+
+			// {"caption":"-"}
+		]
+	}
+]
