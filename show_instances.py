@@ -1,6 +1,7 @@
 import sublime_plugin
 import sublime
 import os
+from operator import itemgetter # 20150729 - support reverse sort (most recent top)
 
 # Looks for occurances of "stringToFind" in the directory
 # of the view or below. Show each in the quick panel - provides
@@ -62,4 +63,7 @@ def findStr(self, top, stringToFind):
                         relFileName = relPath + "/" + fileName
                         i = [fn, fileName, relFileName, line.rstrip('\n')]
                         hitMatrix.append(i)
-    return(hitMatrix)
+    # Return a sorted (most recent first) list
+    # see https://wiki.python.org/moin/HowTo/Sorting
+    revHitMatrix = sorted(hitMatrix, key=itemgetter(1, 0), reverse=True)
+    return(revHitMatrix)
