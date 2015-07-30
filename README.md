@@ -83,8 +83,8 @@ Assuming you are familiar with [Markdown][md], I'll only cover stuff that is uni
 
 First for internal links, you have a few options:
 
-|                            |                                                                   |
-| --                         | --                                                                |
+| Form                       | Description                                                       |
+| -----                      | -----                                                             |
 | `[[topic]]`                | This assumes a file named `topic.md` exists in the current folder |
 | `[topic](./topic-file.md)` | Same, but option for a different title than the file name         |
 | `[topic](./path/index.md)` | Location of anchor file for another namespace                     |
