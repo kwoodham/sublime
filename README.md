@@ -100,9 +100,13 @@ First for internal links, you have a few options:
 | `[topic](./topic-file.md)` | Same, but option for a different title than the file name         |
 | `[topic](./path/index.md)` | Location of anchor file for another namespace                     |
 
-Note that for the last example, The scripts support  only relative paths within the current wiki structure.  So if you put a link in to the file system using absolute paths, or even use relative paths pointing to something outside of the wiki hierarchy, my scripts will likely fail.  Even if they don't you will have a hard time if you move the wiki to another location, or (like me), you keep you wiki synchronize between a few computers using something like SVN or Git.
+Notes:
 
-_(You can also link to other headings in the same file or in a different file. This is covered below under [Referencing other namespaces](#referencing-other-namespaces). In other words, you don't have to restrict links to the file level, but can link to specific locations within other Markdown files.)_
+1. For the last example, the scripts support only __relative paths within the current wiki structure.__  So if you put a link in to the file system using absolute paths, or even use relative paths pointing to something outside of the wiki hierarchy, my scripts will likely fail.  Even if they don't you will have a hard time if you move the wiki to another location, or (like me), you keep you wiki synchronize between a few computers using something like SVN or Git.
+
+2. You can use the last pattern to link to any type of file (not just markdown ".md" files).  For linking to _any_ file in the wiki (not just ones in the current namespace), use the `SideBarEnhancements` package.  The package provides a `Copy as Text... --> Relative Path From View"` right-click option on any file in the side-bar.  Just past this path into the third pattern above and you have a link to the file.  This will provide a clickable link when the page is converted to HTML (assuming your browser had the necessary viewer plugins or handlers).  Also, I've developed the `open_in_app` command (discussed under [Other Commands](#other-commands)) to let you open the file directly from Markdown. (Note that `SideBarEnhancements` also has an `Open With -->` right-click item for opening file types with external applications from the side-bar.)
+
+3. You can also link to other headings in the same file or in a different file. This is covered below under [Referencing other namespaces](#referencing-other-namespaces). In other words, you don't have to restrict links to the file level, but can link to specific locations within other Markdown files.)_
 
 <a name="journaling"></a>
 ## Journaling
@@ -135,7 +139,7 @@ Think of the top one as `"[j]ump"` and the bottom as `"[t]oday"`
 <a name="referencing-other-namespaces"></a>
 ## Referencing other namespaces
 
-The previous topic addressed time-based journal entries.  Here are some additional commands that can be used in journal entries, or also in other namespaces such as references, projects, subprojects, etc...  Note that we've covered `open_link_under_cursor` and an associated key-binding already - it is an often-used command in any type of namespace with cross-references (not just journals).
+The previous topic addressed time-based journal entries.  Here are some additional commands that can be used in journal entries, or also in other namespaces such as references, projects, subprojects, etc...  I've covered `open_link_under_cursor` and an associated key-binding already - it is an often-used command in any type of namespace with cross-references (not just journals).
 
 <a name="commands-1"></a>
 ### Commands
@@ -165,7 +169,7 @@ If you are in a large file, and need to go to some other location in the file, u
 
 _(Note: the ST3 package `MarkdownTOC` maintains an on-the-fly table of contents at the selected location in the file--like the one at the top of this readme.  This can be configured to provide "slugified" links to the headers, and so - using my `open_link_under_cursor` command, you can replicate much of what is done in `toc_jump`. You can use either approach - or both)_
 
-When your directory structure gets to be farily complex, you need to have some means for navigating back up the chain to the root directory.  Placing your cursor someplace in an `index.md` file (I usually do this on the third like right below the top-level heading) the execute `form_index`.  This puts in a set of Markdown bullets with links back up through the hierarchy - kind of a road-map to get you back home.
+When your directory structure gets to be farily complex, you need to have some means for navigating back up the chain to the root directory.  Placing your cursor someplace in an `index.md` file (I usually do this on the third line right below the top-level heading), then execute `form_index`.  This puts in a set of Markdown bullets with links back up through the namespace hierarchy - kind of a road-map to get you back home.
 
 _Note: use the sidebar (turn off/on with `ctrl-k-b` to see the wiki file structure as well. For me, this works well with the following two setting:_
 
