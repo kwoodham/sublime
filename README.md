@@ -18,7 +18,7 @@
 - [Tasks](#tasks)
 - [Post-processing](#post-processing)
 - [Summary](#summary)
-- [Disclaimer](#disclaimer)
+- [Release](#release)
 - [Script summary](#script-summary)
 
 <!-- /MarkdownTOC -->
@@ -245,8 +245,11 @@ This pretty much wraps up my wiki system.  I use these scripts on Linux and Wind
 
 - Kurt
 
-<a name="disclaimer"></a>
-## Disclaimer
+<a name="release"></a>
+## Release
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+
 
 I'd really hate to see you lose anything valuable... I've done my best to make these scripts useful, but I make no claim regarding their correctness, and I cannot guarantee that using them will not result in data loss or mangling of some type.  Please use them only on data that you backup regularly, and know that I cannot be responsible for any loss of data you incur through the use of these scripts.
 
