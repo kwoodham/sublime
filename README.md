@@ -47,23 +47,23 @@ So the directory hierarchy looks something like this:
 ```
 ---file system---|
                  |--my wiki--|
-                 	     |--index.md 
-                 	     |--201X--| 
-                 		      |--index.md
-                 		      |--201XMMDD.md 
-                 		      |--support folders
-                 		      |--support files
-                 	     |--ProjectA--| 
+                             |--index.md 
+                             |--201X--| 
+                                      |--index.md
+                                      |--201XMMDD.md 
+                                      |--support folders
+                                      |--support files
+                             |--ProjectA--| 
                                           |--index.md
                                           |--support folders
                                           |--support files
                                           |--Namespace folder--|
-                 			 		       |--index.md
-                 			 		       |--support folders
-                 			 		       |--support files
-                 	     |--References
-                 	     |--Misc
-                 	     |--etc...
+                                                               |--index.md
+                                                               |--support folders
+                                                               |--support files
+                             |--References
+                             |--Misc
+                             |--etc...
 ```
 
 Note that this structure is representative - currently there are only a handful of "hard-coded" aspects of this structure that you should constrain yourself to if you want all of the wiki commands to work:
@@ -273,9 +273,8 @@ I'd really hate to see you lose anything valuable... I've done my best to make t
 | `goto_today.py`               | Pop to current week journal page and advance to correct day heading |
 
 
-
-
 [st3]: http://www.sublimetext.com/3
 [api]: http://www.sublimetext.com/docs/3/api_reference.html
 [md]: http://daringfireball.net/projects/markdown/syntax
 [pandoc]: http://johnmacfarlane.net/pandoc/
+[sed]: http://www.gnu.org/software/sed/
