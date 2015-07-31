@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Script to process markdown (with optional citations) to html via pandoc.
+# Specifically this first converts markdown wikilinks in this [[form]] to
+# be [form](./form.html) via a sed conversion and passes the modified
+# stream to pandoc.  The first argument to the script is a markdown file
+# (note .md extension is assumed), and the second optional argument is the
+# bibliography file.  - Kurt Woodham February 8, 2013, kwoodham@gmail.com
+
+# Added 7/30/2014 - add directory name to front of path so that
+# panproc can be used to descend recursively using something like:
+#
+# for i in $( find . -name "*.md" ); do panproc $i; done
+
+DIR=$(dirname $1)
+TARGET=$(basename $1 .md)
+PDOPTS="--from markdown+simple_tables --smart --standalone"
+PDOPTS=$PDOPTS" --include-in-header=$HOME/css/markdown.css"
+if [ -n "$2" ] ; then PDOPTS=$PDOPTS" --bibliography="$2" --csl ieee" ; fi
+SEDSTR1="s/\[\[\([-0-9A-Za-z]\{1,\}\)\(\]\]\)/[\1](.\/\1.html)/g"
+SEDSTR2="s/.md)/.html)/g"
+SEDSTR3="s/.md#/.html#/g"
+SEDSTR4="s/.md$/.html/g"
+
+# Convert [[links]] to [links](./links.html) and process markdown
+sed $SEDSTR1";"$SEDSTR2";"$SEDSTR3";"$SEDSTR4 < $1 | pandoc $PDOPTS -o "$DIR/$TARGET".html
+
+# Take out pandoc's style line that keeps code text from wrapping
+sed -i '/<style type=/d' "$DIR/$TARGET".html
