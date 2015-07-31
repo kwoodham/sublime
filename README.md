@@ -1,27 +1,26 @@
 # sublime
 
-<!-- MarkdownTOC -->
-
 - [Introduction](#introduction)
 - [Wiki Configuration](#wiki-configuration)
 - [Setting up the wiki](#setting-up-the-wiki)
 - [Adding material](#adding-material)
 - [Journaling](#journaling)
-        - [Commands](#commands)
-        - [Key bindings](#key-bindings)
+  - [Commands](#commands)
+  - [Key bindings](#key-bindings)
+
 - [Referencing other namespaces](#referencing-other-namespaces)
-        - [Commands](#commands-1)
-        - [Key-bindings](#key-bindings-1)
+  - [Commands](#commands-1)
+  - [Key-bindings](#key-bindings-1)
+
 - [Other commands](#other-commands)
-        - [Key bindings](#key-bindings-2)
+  - [Key bindings](#key-bindings-2)
+
 - [Checking the index.md file](#checking-the-indexmd-file)
 - [Tasks](#tasks)
 - [Post-processing](#post-processing)
 - [Summary](#summary)
-- [Release](#release)
 - [Script summary](#script-summary)
-
-<!-- /MarkdownTOC -->
+- [Release](#release)
 
 
 <a name="introduction"></a>
@@ -243,15 +242,7 @@ for i in $( find . -name "*.md" ); do panproc $i; done
 
 This pretty much wraps up my wiki system.  I use these scripts on Linux and Windows 7 every day, but there may be things about your system that conflict with these scripts.  I'm not very good at trouble-shooting beyond my systems - and I've barely learned just enough Python to write these scripts.  So... if you're having trouble let me know, but I can't make any promises.
 
-- Kurt
-
-<a name="release"></a>
-## Release
-
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
-
-
-I'd really hate to see you lose anything valuable... I've done my best to make these scripts useful, but I make no claim regarding their correctness, and I cannot guarantee that using them will not result in data loss or mangling of some type.  Please use them only on data that you backup regularly, and know that I cannot be responsible for any loss of data you incur through the use of these scripts.
+\- Kurt
 
 <a name="script-summary"></a>
 ## Script summary
@@ -275,6 +266,10 @@ I'd really hate to see you lose anything valuable... I've done my best to make t
 | `task_interface.py`           | Select @task, @done, or @pending task list in the current namespace |
 | `goto_today.py`               | Pop to current week journal page and advance to correct day heading |
 
+<a name="release"></a>
+## Release
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 
 [st3]: http://www.sublimetext.com/3
 [api]: http://www.sublimetext.com/docs/3/api_reference.html
