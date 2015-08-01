@@ -39,7 +39,7 @@ The wiki can be generated and traversed standalone - or it can be rendered into 
 
 I am in favor of using a file system hierarchy for a wiki rather than a "flat" directory.  This helps me keep the number of files in a directory reasonable, and I don't have to worry about clobbering a file with an identically-named file related to a different topic.  The configuration that has evolved for me is to have an `index.md` file in each directory that provides an anchor for that topic.  I developed a script to populate the index file with links to navigate on up the wiki to the root (see `form_index`), and another script that will check that (a) all the links in the file are valid (i.e. point to a real location) and that all files in the directory are referenced within the index (see `index_check`)
 
-I've also struggled a lot with deciding if I should have a time-oriented wiki (journal) or a project-oriented wiki.  What I've come up with supports both - I have a week-based file that is auto-populated with second-level Markdown headers for days (see `wiki-template`) and can then use a combination of `link-to-heading` and `pase-wiki-link` to generate cross references.  Assigning `open_link_under_cursor` provides a hot-key to jump between tree structures.  So this provides a way to chronicle project activities within the time-based journal, or conversely, reference journal dates/events/conversations within project information.  The root of the system is time-based, and a hot-key assigned to `goto_today` will always take you to the current day's journal heading.
+I've also struggled a lot with deciding if I should have a time-oriented wiki (journal) or a project-oriented wiki.  What I've come up with supports both - I have a week-based file that is auto-populated with headings for each day (see `wiki-template`) and can then use a combination of `link-to-heading` and `paste-wiki-link` to generate cross references.  Assigning `open_link_under_cursor` provides a hot-key to jump between pages.  So this provides a way to chronicle project activities within the time-based journal, or conversely, reference journal dates/events/conversations within project information.  The root of the system is time-based, and a hot-key assigned to `goto_today` will always take you to the current day's journal heading.
 
 So the directory hierarchy looks something like this:
 
@@ -67,13 +67,13 @@ So the directory hierarchy looks something like this:
 
 Note that this structure is representative - currently there are only a handful of "hard-coded" aspects of this structure that you should constrain yourself to if you want all of the wiki commands to work:
 
-1. The top-level wiki folder is the Sublime Text project folder 
+1. The top-level wiki folder is the Sublime Text project folder (all paths in the wiki are relative and any absolute paths processed by the scripts are "rooted" to this directory)
 2. There is a "year" folder (e.g. 2015) at the top level of the wiki
 3. Each "namespace" folder has an `index.md` in it - this includes the top-level wiki folder, the year folders, and any other top-level folder or lower-level folder with a defined namespace.
 
 Some clarification is necessary on this last point.  In the above hierarchy, I have shown support folders and support files in each of the namespace folders.  You can drop any type of file in any of the folders and then link to it from within the `index.md` file or any other markdown file in the directory.  Say, for instance, you attended a conference and received all the presentation files: you might, then, have a page that is `conference.md` that captures your notes, and--just to keep the namespace directory clean--set up a folder `conference/` and in it place all of the presentation files.  Then in your `conference.md` file you might reference a specific presentation using `[Presentation A](./conference/presentationA-file.ppt)`, and in your namespace `index.md` file  you put in a link to `./conference.md` as an important conference that pertains to the project. Because you are only using `conference/` for local file storage, we're not considering it a namespace, so it probably doesn't make sense to put an `index.md` file in it.
 
-__"So why `index.md` and not some other name?"__  In my system I give the the namespace folder a descriptive name already, so I don't need to also give the anchor file a descriptive name as well.  So to me a `[Systems Engineering Reference](./references/systems-engineering/index.md)` link makes more sense than a `[Systems Engineering Reference](./directory1/directory2/systems-engineering.md)` link, where I don't have any idea about the purpose of `directory1` or `directory2` unless I look inside.  When I'm using my file explorer to find the right folder to drop something into, it helps to have descriptive folder names; and if I have descriptive folder names, I don't have to double-up by having a descriptive anchor file name.  So I chose `index.md`.  You can use whatever you want, but the advantage of using `index.md` is that you can use the `index_check` command (which assumes the existence of an `index.md` file) to make sure that all of the "stuff" in the namespace is referenced.  It's very easy to dump something in a folder, and then not having any wiki content that points to it.  
+__"So why `index.md` and not some other name?"__  In my system I give the the namespace folder a descriptive name already, so I don't need to also give the anchor file a descriptive name as well.  So to me a `[Systems Engineering Reference](./references/systems-engineering/index.md)` link makes more sense than a `[Systems Engineering Reference](./directory1/directory2/systems-engineering.md)` link, where I don't have any idea about the purpose of `directory1` or `directory2` unless I look inside.  When I'm using my file explorer to find the right folder to drop something into, it helps to have descriptive folder names; and if I have descriptive folder names, I don't have to double-up by having a descriptive anchor file name.  So I chose `index.md`.  You can use whatever you want, but I have the existence of an `index.md` file assumed in a few of the scripts, such as `index_check` and `form_index`.  
 
 So if you set up a project and know that there will be lots of associated meetings, files, sub-topics, etc... it's probably wise to consider it as having its own "namespace" (project folder) and then have an `index.md` file in it.  This namespace folder can have subfolders (which can be other namespaces), other Markdown files, supporting files, etc...  
 
@@ -90,7 +90,7 @@ Again, all of this uses the Sublime project folder as the root reference.  This 
 <a name="adding-material"></a>
 ## Adding material
 
-Assuming you are familiar with [Markdown][md], I'll only cover stuff that is unique to this wiki work-flow.
+Assuming you are familiar with [Markdown][md] syntax, I'll only cover stuff that is relevant putting in internal (to the current page) or cross-page wiki links.
 
 First for internal links, you have a few options:
 
@@ -106,7 +106,7 @@ Notes:
 
 2. You can use the last pattern to link to any type of file (not just markdown ".md" files).  For linking to _any_ file in the wiki (not just ones in the current namespace), use the `SideBarEnhancements` package.  The package provides a `Copy as Text... --> Relative Path From View"` right-click option on any file in the side-bar.  Just past this path into the third pattern above and you have a link to the file.  This will provide a clickable link when the page is converted to HTML (assuming your browser had the necessary viewer plugins or handlers).  Also, I've developed the `open_in_app` command (discussed under [Other Commands](#other-commands)) to let you open the file directly from Markdown. (Note that `SideBarEnhancements` also has an `Open With -->` right-click item for opening file types with external applications from the side-bar.)
 
-3. You can also link to other headings in the same file or in a different file. This is covered below under [Referencing other namespaces](#referencing-other-namespaces). In other words, you don't have to restrict links to the file level, but can link to specific locations within other Markdown files.)_
+3. You can also link to other headings in the same file or in a different file. This is covered below under [Referencing other namespaces](#referencing-other-namespaces), using the commands `link_to_heading` and `paste_wiki_link`. In other words, you don't have to restrict links to the file level, but can link to specific locations within other Markdown files.)_
 
 <a name="journaling"></a>
 ## Journaling
@@ -244,7 +244,7 @@ for i in $( find . -name "*.md" ); do panproc $i; done
 <a name="summary"></a>
 ## Summary 
 
-This pretty much wraps up my wiki system.  I use these scripts on Linux and Windows 7 every day, but there may be things about your system that conflict with these scripts.  I'm not very good at trouble-shooting beyond my systems - and I've barely learned just enough Python to write these scripts.  So... if you're having trouble let me know, but I can't make any promises.
+This pretty much wraps up my wiki system.  I use these scripts on Linux and Windows 7 every day, but there may be things about your system that conflict with these scripts.  I'm not very good at trouble-shooting beyond my systems - and I've barely learned just enough Python to write these scripts.  So... if you're having trouble let me know (my gmail is `kwoodham`), but I can't make any promises.
 
 \- Kurt
 
