@@ -152,9 +152,9 @@ Note that you can alway go to the slugified heading location using your key-bind
 
 > Update **Monday, August 17, 2015:** Both `link_to_heading` and `open_link_under_heading` have been updated to accept a hard-coded anchor placed at the end of a heading.  For instance:
 > 
-> ## This heading {#special}
+> `## This heading {#special}`
 > 
-> will now use the `#special` tag to anchor the link.  The link name (as in `[This heading](#special)`) will use the preceding heading text.  Note that it is assumed that the #anchor is already in a suitably "slugified" form.
+> will now use the `#special` tag to anchor the link.  The resulting link name (as in `[This heading](#special)`) will use the preceding heading text.  Note that it is assumed that the #anchor is already in a suitably "slugified" form.
 
 <a name="key-bindings-1"></a>
 ### Key-bindings
