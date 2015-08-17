@@ -144,11 +144,17 @@ The previous topic addressed time-based journal entries.  Here are some addition
 <a name="commands-1"></a>
 ### Commands
 
-So you've generated a project or reference file, and you've entered some information that you want to link to another location in your wiki.  Some wiki systems have means to embed a specific "anchor" into a specific location, but I find that it's adequate to use a heading for the reference.  So `link_to_heading` provides a way for me to capture a link to any heading in any page, and then, using `paste_wiki_link` embed that link into any other page.  The reason that there are two commands is that I always want to use a relative path between the links, so I need to (a) capture the link (b) go to the page/location where I want the link to appear, and (c) paste in the link in a way that is aware of the _relative_ proximity between the linked page and the pake in which the link appears.
+So you've generated a project or reference file, and you've entered some information that you want to link to another location in your wiki.  Some wiki systems have means to embed a specific "anchor" into a specific location, but I find that it's adequate to use a heading for the reference.  So `link_to_heading` provides a way for me to capture a link to any heading in any page, and then, using `paste_wiki_link` embed that link into any other page.  The reason that there are two commands is that I always want to use a relative path between the links, so I need to (a) capture the link (b) go to the page/location where I want the link to appear, and (c) paste in the link in a way that is aware of the _relative_ proximity between the linked page and the page in which the link appears.
 
 So execute `link_to_heading` (using `view.run_command()` if you don't set up key bindings), then from the drop down select the heading you want to generate the link for.  Now go over to the page where you want the link to appear and make sure that your cursor is located in the proper location.  Then execute `paste_wiki_link`, the heading text, and a "slugified" version of the heading will be placed in the destination.  _("Slugify" is used to take out Caps, spaces, etc.. to create a contiguous string for the link reference)_
 
 Note that you can alway go to the slugified heading location using your key-bindings to `open_link_under_cursor` - the command understands slugify-ese.  
+
+> Update **Monday, August 17, 2015:** Both `link_to_heading` and `open_link_under_heading` have been updated to accept a hard-coded anchor placed at the end of a heading.  For instance:
+> 
+> ## This heading {#special}
+> 
+> will now use the `#special` tag to anchor the link.  The link name (as in `[This heading](#special)`) will use the preceding heading text.  Note that it is assumed that the #anchor is already in a suitably "slugified" form.
 
 <a name="key-bindings-1"></a>
 ### Key-bindings
