@@ -11,6 +11,8 @@ from User.slugify import slugify
 # Assume that link is correctly formed
 # Assume that the path start with "." (always relative) and ends in ".md"
 
+# Monday, August 03, 2015 - added in logic to link to heading of form:
+# ## This is a heading {#anchor}
 
 class OpenLinkUnderCursorCommand(sublime_plugin.TextCommand):
     link = str('')
@@ -97,7 +99,13 @@ def set_location(view, link):
     locations = view.find_all('^[\#]+')
     while len(locations):
         location = locations.pop(0)
-        slug = slugify(view.substr(view.line(location.end())), '-')
+        str_line = view.substr(view.line(location.end()))
+        a = str_line.rfind('{#')  # Check first for a hard-coded anchor
+        if a == -1:
+            slug = slugify(str_line, '-')
+        else:
+            b = str_line.rfind('}')
+            slug = str_line[(a+2):b]
         if slug == link:
             view.show_at_center(location)
             return

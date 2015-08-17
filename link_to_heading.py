@@ -31,6 +31,15 @@ class GenerateWikiLink(sublime_plugin.TextCommand):
     def run(self, edit, args):
         linkName = re.sub('^[\#]+\s', '', args['text'])
         fileName = self.view.file_name()
-        slugName = slugify(linkName, '-')
+        if (linkName.rfind('{#') > -1): #Check first for a hard-coded anchor
+            a = linkName.rfind('{#')
+            b = linkName.rfind('}')
+            slugName = linkName[(a+2):b]
+            linkName = linkName[:a].strip()
+        else:
+            slugName = slugify(linkName, '-')
         outStr = linkName + '|' + fileName + '|' + slugName
+        # print(linkName)
+        # print(slugName)
+        # print(outStr)
         sublime.set_clipboard(outStr)
