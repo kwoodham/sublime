@@ -26,6 +26,7 @@ class TaskToggleCommand(sublime_plugin.TextCommand):
                 return
             elif text[:5] == "@done":
                 text = text.replace("@done <s>","@task ")
-                text = text.replace("</s>","")
-                self.view.replace(edit,lin,text)
+                self.view.replace(edit,lin,text.replace("</s>",""))
                 return
+            else:
+                print("I don't know how to transition from this task state")
