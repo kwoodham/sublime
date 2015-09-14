@@ -1,7 +1,7 @@
 import sublime_plugin
 import sublime
 import os
-from operator import itemgetter # 20150729 - support reverse sort (most recent top)
+from operator import itemgetter  # 20150729 - support reverse sort (most recent top)
 
 # Looks for occurances of "stringToFind" in the directory
 # of the view or below. Show each in the quick panel - provides
@@ -31,7 +31,7 @@ class ShowInstancesCommand(sublime_plugin.TextCommand):
         if index == -1:
             return
         self.lineNumb = self.matrix[index][0]
-        self.fileName = self.matrix[index][2] # need to include path
+        self.fileName = self.matrix[index][2]  # need to include path
         ShowInstancesCommand.newView = self.view.window().open_file(self.fileName)
         self.center_text(ShowInstancesCommand.newView)
 
@@ -44,6 +44,7 @@ class ShowInstancesCommand(sublime_plugin.TextCommand):
             # Half a second should be ample - above ref gives 10 ms
             sublime.set_timeout(lambda: self.center_text(ShowInstancesCommand.newView), 500)
 
+
 def findStr(self, top, stringToFind):
     p1 = os.path.relpath(os.path.dirname(self.view.file_name()))
     hitMatrix = []
@@ -55,7 +56,7 @@ def findStr(self, top, stringToFind):
                 fn = 0  # Need to reference line number
                 for line in f:
                     fn = fn + 1
-                    if line.find(stringToFind) != (-1):
+                    if line.find(stringToFind) == (0):  # Only match at start of line
                         n = n + int(1)
                         p0 = os.path.relpath(root)
                         relPath = os.path.relpath(p0, p1)
