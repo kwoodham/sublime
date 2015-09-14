@@ -18,8 +18,9 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
 
         self.c = []
         for line in TodoInterfaceCommand.l:
-            l1 = line.find('@')
+            l1 = line.find(' @')  # space before context
             if l1 > 0:
+                l1 = l1+1  # move pointer to "@"
                 l2 = line.find(' ', l1)
                 if l2 < 0:
                     l2 = len(line)
@@ -37,8 +38,9 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
         self.d = []
         for line in TodoInterfaceCommand.l:
             if line.find(self.c[index]) > 0:
-                l1 = line.find('+')
+                l1 = line.find(' +')  # space eliminates ":+2wk" tag pattern
                 if l1 > 0:
+                    l1 = l1+1  # move pointer to "+"
                     l2 = line.find(' ', l1)
                     if l2 < 0:
                         l2 = len(line)
@@ -56,9 +58,6 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
         if index == -1:
             return
         project = self.d[index]
-
-        # print(TodoInterfaceCommand.context)
-        # print(project)
 
         self.e = []
 
