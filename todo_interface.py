@@ -11,7 +11,7 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
 
         settings = sublime.load_settings("TodoInterface.sublime-settings")
         todo_path = settings.get('todo_path', True)
-        f = open(todo_path,'r')
+        f = open(todo_path, 'r')
         s = f.read()
         f.close()
         TodoInterfaceCommand.l = s.splitlines()
@@ -20,10 +20,10 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
         for line in TodoInterfaceCommand.l:
             l1 = line.find('@')
             if l1 > 0:
-                l2 = line.find(' ',l1)
+                l2 = line.find(' ', l1)
                 if l2 < 0:
                     l2 = len(line)
-            self.c.append( line[l1:l2] )
+            self.c.append(line[l1:l2])
         self.c = list(set(self.c))
         self.c.sort()
         self.view.window().show_quick_panel(self.c, self.on_done1)
@@ -39,10 +39,10 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
             if line.find(self.c[index]) > 0:
                 l1 = line.find('+')
                 if l1 > 0:
-                    l2 = line.find(' ',l1)
+                    l2 = line.find(' ', l1)
                     if l2 < 0:
                         l2 = len(line)
-                    self.d.append( line[l1:l2] )
+                    self.d.append(line[l1:l2])
         if len(self.d) == 0:
             self.d.append('all')
         elif len(self.d) > 1:
@@ -63,7 +63,7 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
         self.e = []
 
         for line in TodoInterfaceCommand.l:
-            if line.find(TodoInterfaceCommand.context) > 0 and  (line.find(project) > 0 or project == 'all'):
+            if line.find(TodoInterfaceCommand.context) > 0 and (line.find(project) > 0 or project == 'all'):
                 self.e.append(line)
         self.view.window().show_quick_panel(self.e, self.on_done3)
 
@@ -71,8 +71,7 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
 
         if index == -1:
             return
-        self.outStr = '`' + self.e[index] + '`'
-        self.view.run_command("insert_text", {"args": {'text': self.outStr}})
+        self.view.run_command("insert_text", {"args": {'text': self.e[index]}})
 
 
 class InsertText(sublime_plugin.TextCommand):
