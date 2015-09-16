@@ -20,6 +20,8 @@ class TraceBackCommand(sublime_plugin.TextCommand):
                     fn = int(0)  # Want to reference line number in output
                     for line in f:
                         fn = fn + 1
+                        if line.find("--- Traceback Links ---") > (-1):
+                            break # Don't include traceback links as traceback links
                         if line.find(relPath + "/" + a_file) > (-1):
                             relPathBack = os.path.relpath(root,a_path)
                             relPathBack = relPathBack.replace('\\', '/') + "/" + fileName
