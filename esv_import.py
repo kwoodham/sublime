@@ -2,7 +2,18 @@ import sublime_plugin
 import sublime
 import urllib
 
-# Using Python example from http://www.esvapi.org/api/#sample
+# Take highlighted bible reference in a markdown file and
+# paste in the ESV text below the reference.  No markdown
+# is added to the passage, so this will work fine in a
+# straight text file.
+#
+# Uses Python 2 example from http://www.esvapi.org/api/#sample
+# updated to Python 3.
+#
+# No gentle error handling or anything: be prepared to hit
+# ctrl-Z to undo anything bad resulting from high-lighting 
+# something other than a valid reference.
+#
 # Kurt Woodham
 # 17 Sep 2015
 
