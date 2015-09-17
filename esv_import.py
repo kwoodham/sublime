@@ -59,7 +59,11 @@ class ESVSession:
         options = ['include-short-copyright=0',
                    'output-format=plain-text',
                    'include-passage-horizontal-lines=0',
-                   'include-heading-horizontal-lines=0']
+                   'include-heading-horizontal-lines=0',
+                   'include-passage-references=0',
+                   'include-headings=0',
+                   'include-subheadings=0',
+                   'include-selahs=0']
         self.options = '&'.join(options)
         self.baseUrl = 'http://www.esvapi.org/v2/rest/passageQuery?key=%s' % (key)
 
