@@ -13,17 +13,17 @@ class TraceBackCommand(sublime_plugin.TextCommand):
         hitMatrix = []
         for root, dirs, files in os.walk(top):
             for fileName in files:
-                if fileName.endswith(".md") and os.path.join(root,fileName) != a: # bypass self
-                    relPath = os.path.relpath(a_path,root)
+                if fileName.endswith(".md") and os.path.join(root, fileName) != a:  # bypass self
+                    relPath = os.path.relpath(a_path, root)
                     relPath = relPath.replace('\\', '/')
                     f = open(os.path.join(root, fileName), encoding='ascii', errors='surrogateescape')
                     fn = int(0)  # Want to reference line number in output
                     for line in f:
                         fn = fn + 1
                         if line.find("--- Traceback Links ---") > (-1):
-                            break # Don't include traceback links as traceback links
+                            break  # Don't include traceback links as traceback links
                         if line.find(relPath + "/" + a_file) > (-1):
-                            relPathBack = os.path.relpath(root,a_path)
+                            relPathBack = os.path.relpath(root, a_path)
                             relPathBack = relPathBack.replace('\\', '/') + "/" + fileName
                             i = "- [" + fileName + "](" + relPathBack + ") - line: " + str(fn) + "\n"
                             hitMatrix.append(i)
