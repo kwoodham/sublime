@@ -3,25 +3,28 @@
 import subprocess
 import sys
 import re
+import textwrap
 
 P = []
 P.append(['<lb type="x-begin-paragraph"/>', ''])
 P.append(['<lb type="x-end-paragraph"/>', '\\'])
-P.append(['<q marker="">',''])
-P.append(['<q>',''])
+P.append(['<q marker="">', ''])
+P.append(['</q>', ''])
 P.append(['<milestone marker="&#8220;" type="cQuote"/>', '"'])
 P.append(['<milestone marker="&#8221;" type="cQuote"/>', '"\\'])
 P.append(['<q level="1" marker="&#8220;"/>', '"'])
 P.append(['<q level="1" marker="&#8221;"/>', '"\\'])
 P.append(['<q level="2" marker="&#8216;"/>', "'"])
 P.append(['<q level="2" marker="&#8217;"/>', "'"])
+P.append(['&#8212;', '--'])
 P.append(['(ESV)', ''])
 
-re_str = '\s[es]ID\=\"[0-9.]+\"'
+re_str1 = '\s[es]ID\=\"[0-9.]+\"'   # Takes care of the eID and sID strings
+re_str2 = '\<[a-zA-Z0-9="/ -]+\>'   # Misc markups
 
 refs = ' '.join((sys.argv[1:]))
 argd = "-b ESV -e HTML -k "
-cmds = "diatheke " + argd + refs 
+cmds = "diatheke " + argd + refs
 
 text = subprocess.Popen(cmds, shell=True, stdout=subprocess.PIPE).stdout.read()
 text = text.decode("utf-8")
@@ -35,9 +38,10 @@ f = text.split('\n')
 # Do markup replacements and store results in f1
 f1 = []
 for line in f:
-    line = re.sub(re_str, '', line)
+    line = re.sub(re_str1, '', line)
     for i in range(0, len(P)):
         line = line.replace(P[i][0], P[i][1])
+    line = re.sub(re_str2, ' ', line)
     f1.append(line)
 
 # Only want verse numbers if book and chapter haven't change
@@ -51,16 +55,17 @@ for line in f1:
         book_chap = line[0:line.find(':')]
     f2.append(line)
 
-# Want consecutive verses in paragraphs if no hard-coded 
+# Want consecutive verses in paragraphs if no hard-coded
 # breaks are at the end of the verse
 f3 = []
 new_para = ''
 for line in f2:
     if line.find('\\') > -1:
-        line = line.replace('\\','')
+        line = line.replace('\\', '')
         line = line.strip()
         new_para = new_para + ' ' + line
         new_para = new_para.lstrip()
+        new_para = re.sub('[ ]+', ' ', new_para)  # Reduce multiple spaces to one
         f3.append(new_para)
         f3.append('')
         new_para = ''
@@ -71,8 +76,10 @@ for line in f2:
         last_write = int(0)
 if not last_write:
     new_para = new_para.lstrip()
+    new_para = re.sub('[ ]+', ' ', new_para)  # Reduce multiple spaces to one
     f3.append(new_para)
     f3.append('')
 
+
 for line in f3:
-    print(line)
+    print(textwrap.fill(line))  # Default is 70 characters
