@@ -22,7 +22,7 @@ class TraceBackCommand(sublime_plugin.TextCommand):
                         fn = fn + 1
                         if line.find("--- Traceback Links ---") > (-1):
                             break  # Don't include traceback links as traceback links
-                        if line.find(relPath + "/" + a_file) > (-1):
+                        if line.find("(" + relPath + "/" + a_file) > (-1):
                             relPathBack = os.path.relpath(root, a_path)
                             relPathBack = relPathBack.replace('\\', '/') + "/" + fileName
                             i = "- [" + fileName + "](" + relPathBack + ") - line: " + str(fn) + "\n"
