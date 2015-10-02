@@ -15,10 +15,13 @@ class CallPanprocCommand(sublime_plugin.TextCommand):
         panproc_path = settings.get('panproc_path', [])
         file_in = self.view.file_name().replace('\\', '/').replace('C:', '/c')
 
-        cmd_str = []
-        cmd_str.append(sh_path)
-        cmd_str.append('-c')
-        cmd_str.append(panproc_path + " " + file_in)
+        # Prepend shell command if provided in settings (needed under windows, not linux):
+        if sh_path:
+            cmd_str = [sh_path]
+            cmd_str.append('-c')
+        else:
+            cmd_str = []
+        cmd_str.append(panproc_path + ' ' + file_in)
 
         subprocess.Popen(cmd_str, shell='TRUE', stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return
