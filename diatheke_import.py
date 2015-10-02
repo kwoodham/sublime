@@ -28,7 +28,7 @@ class DiathekeImportCommand(sublime_plugin.TextCommand):
             # adding text
 
             for line in pssge:
-                end = end + self.view.insert(edit, end, "> " + line + "\n")
+                end = end + self.view.insert(edit, end, "> " + line + "  \n")
 
         # Place the buffer at the end of the new text, and center the view
         self.view.sel().clear()
@@ -40,8 +40,11 @@ class DiathekeSession:
 
     def doPassageQuery(self, refTxt):
         P = []
-        P.append(['<lb type="x-begin-paragraph"/>', ''])
-        P.append(['<lb type="x-end-paragraph"/>', '\\'])
+        P.append(['<lb type="x-begin-paragraph"/>', '(br)'])
+        P.append(['<lb subType="x-same-paragraph" type="x-begin-paragraph"/>', '(br)'])
+        P.append(['<lb type="x-end-paragraph"/>', '(br)'])
+        P.append(['<l type="x-indent"/>', ' \t'])
+        P.append(['<l type="x-br"/>', '(br)'])
         P.append(['<q marker="">', ''])
         P.append(['</q>', ''])
         P.append(['<milestone marker="&#8220;" type="cQuote"/>', '"'])
@@ -53,8 +56,8 @@ class DiathekeSession:
         P.append(['&#8212;', '--'])
         P.append(['(ESV)', ''])
 
-        re_str1 = '\s[es]ID\=\"[0-9.]+\"'   # Takes care of the eID and sID strings
-        re_str2 = '\<[a-zA-Z0-9="/ -]+\>'   # Misc markups
+        re_str1 = '\s[es]ID\=\"[wx0-9.]+\"'   # Takes care of the eID and sID strings
+        re_str2 = '\<[a-zA-Z0-9="/ -]+\>'     # Misc markups that I don't process (just remove)
 
         argd = "-b ESV -e HTML -k "
         cmds = "diatheke " + argd + refTxt
@@ -66,7 +69,9 @@ class DiathekeSession:
         # Do markup replacements and store results in f1
         f1 = []
         for line in f:
-            line = re.sub(re_str1, '', line)
+            a = re.findall(re_str1, line)
+            for instance in a:
+                line = line.replace(instance, '')
             for i in range(0, len(P)):
                 line = line.replace(P[i][0], P[i][1])
             line = re.sub(re_str2, ' ', line)
@@ -85,7 +90,7 @@ class DiathekeSession:
 
         # Want consecutive verses in paragraphs if no hard-coded
         # breaks are at the end of the verse
-        passage = []
+        f3 = []
         new_para = ''
         for line in f2:
             if line.find('\\') > -1:
@@ -94,17 +99,30 @@ class DiathekeSession:
                 new_para = new_para + ' ' + line
                 new_para = new_para.lstrip()
                 new_para = re.sub('[ ]+', ' ', new_para)  # Reduce multiple spaces to one
-                passage.append(new_para)
-                passage.append('')
+                f3.append(new_para)
+                f3.append('')
                 new_para = ''
                 last_write = int(1)
             else:
-                line = line.lstrip()
+                line = line.strip()
                 new_para = new_para + ' ' + line
                 last_write = int(0)
         if not last_write:
-            new_para = new_para.lstrip()
+            new_para = new_para.strip()
             new_para = re.sub('[ ]+', ' ', new_para)  # Reduce multiple spaces to one
-            passage.append(new_para)
-            passage.append('')
+            f3.append(new_para)
+            f3.append('')
+
+        # Some newlines may have been introduced in markup replacements (e.g x-br) - add
+        # these:
+        passage = []
+        for line in f3:
+            line_split = line.split('(br)')
+            for new_line in line_split:
+                passage.append(new_line.strip(' '))
         return passage
+
+        # passage = []
+        # for line in f3:
+        #     passage = passage + line.split('(br)')
+        # return passage
