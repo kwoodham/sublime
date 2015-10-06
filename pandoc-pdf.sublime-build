@@ -1,0 +1,3 @@
+{
+    "cmd": ["pandoc", "-V", "geometry:margin=1in", "--smart", "-f", "markdown", "-t", "latex", "-o", "$file_base_name.pdf", "$file"]
+}
