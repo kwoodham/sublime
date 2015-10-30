@@ -24,6 +24,8 @@ class TraceBackCommand(sublime_plugin.TextCommand):
                             break  # Don't include traceback links as traceback links
                         if line.find("(" + relPath + "/" + a_file) > (-1):
                             relPathBack = os.path.relpath(root, a_path)
+                            if not(relPathBack.startswith('.')):
+                                relPathBack = "./" + relPathBack  # append "./" to subdirectories
                             relPathBack = relPathBack.replace('\\', '/') + "/" + fileName
                             i = "- [" + fileName + "](" + relPathBack + ") - line: " + str(fn) + "\n"
                             hitMatrix.append(i)
