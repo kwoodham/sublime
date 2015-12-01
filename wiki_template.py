@@ -13,7 +13,7 @@ class WikiTemplateCommand(sublime_plugin.TextCommand):
         sel = self.view.sel()  # This returns a RegionSet (only one region)
         for s in sel:
             outStr = "# Week of " + a + "\n\n"
-            outStr = outStr + "[[" + str(b.year) + "]]\n\n"
+            outStr = outStr + "[" + str(b.year) + "](./index.md)\n\n"
             outStr = outStr + "## Goals/Tasks\n\n\n"
             end = s.b + self.view.insert(edit, s.b, outStr)
             for x in range(0, 5):  # 0 = Monday, 6 = Sunday
