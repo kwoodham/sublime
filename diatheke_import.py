@@ -3,6 +3,10 @@ import sublime
 import subprocess
 import re
 
+# 10 Dec 2015 - if empty selection, then grab the whole line as a reference.  This means that 
+# I don't have to select a reference after I just typed it on a new line.  This also means that
+# the line should only contain a reference or a chain of references.
+# 10 Dec 2015 - add a blank line in between a chain of references
 
 class DiathekeImportCommand(sublime_plugin.TextCommand):
 
@@ -10,6 +14,8 @@ class DiathekeImportCommand(sublime_plugin.TextCommand):
 
         # Get the reference
         refLoc = self.view.sel()[0]
+        if not refLoc.size():  # if selection is not highlighted, assume line is reference(s)
+            refLoc = self.view.line(refLoc.a)
         end = max(refLoc.a, refLoc.b)
         end = end + self.view.insert(edit, end, "\n\n")
 
@@ -29,7 +35,7 @@ class DiathekeImportCommand(sublime_plugin.TextCommand):
 
             for line in pssge:
                 end = end + self.view.insert(edit, end, "> " + line + "  \n")
-
+            end = end + self.view.insert(edit, end, "\n") # Add a space between references
         # Place the buffer at the end of the new text, and center the view
         self.view.sel().clear()
         self.view.sel().add(sublime.Region(end))
