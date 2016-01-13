@@ -45,9 +45,9 @@ print("Starting", args.count, "minute timer...")
 for x in range(1, args.count):
     time.sleep(60)
     if args.up:
-        print("minutes past: {:2d}".format(x), end='\r')
+        print("  minutes past: {:2d}".format(x), end='\r')  # space for cursor at beginning of line
     elif args.down:
-        print("minutes left: {:2d}".format(args.count-x),  end='\r')
+        print("  minutes left: {:2d}".format(args.count-x),  end='\r')
     else:
         print("something bad be happening: should not get here!")
         sys.exit()
