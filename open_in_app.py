@@ -2,6 +2,7 @@ import sublime_plugin
 import sublime
 import subprocess
 import os
+import platform
 
 
 class OpenInAppCommand(sublime_plugin.TextCommand):
@@ -36,6 +37,8 @@ class OpenInAppCommand(sublime_plugin.TextCommand):
             return
 
         # Launch the application with arguments and file
+        if platform.system() == 'Windows':
+            abs_path = abs_path.replace("/", "\\")
         try:
             subprocess.Popen([app_list[index], arg_list[index], abs_path])
         except:
