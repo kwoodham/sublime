@@ -12,18 +12,42 @@
 #
 # for i in $( find . -name "*.md" ); do panproc $i; done
 
+# Added 14 Mar 2016 - critic markup processing (highlighing added to CSS file). 
+# Also checks for presence of MarkdownTOC content--if there it is stripped out 
+# and results stored in a temp file, then the temp file is processed.
+
 DIR=$(dirname $1)
 TARGET=$(basename $1 .md)
-PDOPTS="--from markdown+simple_tables --smart --standalone"
+PDOPTS="--from markdown+simple_tables+auto_identifiers --smart --standalone --toc"
 PDOPTS=$PDOPTS" --include-in-header=$HOME/css/markdown.css"
 if [ -n "$2" ] ; then PDOPTS=$PDOPTS" --bibliography="$2" --csl ieee" ; fi
-SEDSTR1="s/\[\[\([-0-9A-Za-z]\{1,\}\)\(\]\]\)/[\1](.\/\1.html)/g"
-SEDSTR2="s/.md)/.html)/g"
-SEDSTR3="s/.md#/.html#/g"
-SEDSTR4="s/.md$/.html/g"
 
-# Convert [[links]] to [links](./links.html) and process markdown
-sed $SEDSTR1";"$SEDSTR2";"$SEDSTR3";"$SEDSTR4 < $1 | pandoc $PDOPTS -o "$DIR/$TARGET".html
+# Form sed string - first for critic markups
+SEDSTR=''
+SEDSTR=$SEDSTR's/{++/<ins>/g;s/++}/<\/ins>/g'
+SEDSTR=$SEDSTR';s/{--/<del>/g;s/--}/<\/del>/g'
+SEDSTR=$SEDSTR';s/{~~/<del>/g;s/~>/<\/del><ins>/g;s/~~}/<\/ins>/g'
+SEDSTR=$SEDSTR';s/{>>/<span class="critic comment">/g;s/<<}/<\/span>/g'
+SEDSTR=$SEDSTR';s/{==/\<mark>/g;s/==}/<\/mark>/g'
+
+# Now for "panproc" link changes
+SEDSTR=$SEDSTR';s/\[\[\([-0-9A-Za-z]\{1,\}\)\(\]\]\)/[\1](.\/\1.html)/g'
+SEDSTR=$SEDSTR';s/.md)/.html)/g'
+SEDSTR=$SEDSTR';s/.md#/.html#/g'
+SEDSTR=$SEDSTR';s/.md$/.html/g'
+
+# Check to see if there is a need to process MarkdownTOC content
+temp=$(grep "MarkdownTOC" $1)
+
+if [ ${#temp} -gt 0 ]
+    then 
+		# Remove MarkdownTOC lines and store results in ".tmp" before sec/pandoc
+		$HOME/.local/bin/strip_toc.py "$DIR/$TARGET".md
+		sed "$SEDSTR" "$DIR/$TARGET".tmp | pandoc $PDOPTS -o "$DIR/$TARGET".html
+		rm -f "$DIR/$TARGET".tmp
+	else
+		sed "$SEDSTR" < $1 | pandoc $PDOPTS -o "$DIR/$TARGET".html
+fi
 
 # Take out pandoc's style line that keeps code text from wrapping
 sed -i '/<style type=/d' "$DIR/$TARGET".html
