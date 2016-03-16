@@ -7,7 +7,7 @@
 # (note .md extension is assumed), and the second optional argument is the
 # bibliography file.  - Kurt Woodham February 8, 2013, kwoodham@gmail.com
 
-# Added 7/30/2014 - add directory name to front of path so that
+# Added 30 Jun 2014 - add directory name to front of path so that
 # panproc can be used to descend recursively using something like:
 #
 # for i in $( find . -name "*.md" ); do panproc $i; done
@@ -18,7 +18,7 @@
 
 DIR=$(dirname $1)
 TARGET=$(basename $1 .md)
-PDOPTS="--from markdown+simple_tables+auto_identifiers --smart --standalone --toc"
+PDOPTS="--from markdown+simple_tables+auto_identifiers --smart --standalone"
 PDOPTS=$PDOPTS" --include-in-header=$HOME/css/markdown.css"
 if [ -n "$2" ] ; then PDOPTS=$PDOPTS" --bibliography="$2" --csl ieee" ; fi
 
@@ -41,9 +41,14 @@ temp=$(grep "MarkdownTOC" $1)
 
 if [ ${#temp} -gt 0 ]
     then 
-		# Remove MarkdownTOC lines and store results in ".tmp" before sec/pandoc
+    	# add TOC switch to pandoc options
+    	PDOPTS=$PDOPTS" --toc"
+
+		# Remove MarkdownTOC lines and store results in ".tmp" before sed/pandoc
 		$HOME/.local/bin/strip_toc.py "$DIR/$TARGET".md
 		sed "$SEDSTR" "$DIR/$TARGET".tmp | pandoc $PDOPTS -o "$DIR/$TARGET".html
+
+		# Delete the ".tmp" file
 		rm -f "$DIR/$TARGET".tmp
 	else
 		sed "$SEDSTR" < $1 | pandoc $PDOPTS -o "$DIR/$TARGET".html
