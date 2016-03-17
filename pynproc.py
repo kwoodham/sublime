@@ -66,6 +66,7 @@ if __name__ == '__main__':
         fname, fext = os.path.splitext(args.input.name)
         args.output = fname + '.html'
 
+    print('Processing ' + args.input.name + '...')
     in_file = args.input
     in_text = in_file.read()
     in_text = in_text.split('\n')
@@ -77,6 +78,7 @@ if __name__ == '__main__':
 
     out_text = '\n'.join(out_text)
 
+    print('Creating ' + args.output + '...')
     out_html = pypandoc.convert(
         out_text,
         to='html', format='md',

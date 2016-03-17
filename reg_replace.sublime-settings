@@ -1,0 +1,20 @@
+{
+    "replacements": {
+        "change_single_quote": {
+            "find":  "[‘’]",
+            "replace": "'",
+        },
+        "change_double_quote": {
+            "find": "[“”]",
+            "replace": "\"",
+        },
+        "change_dash": {
+            "find": "[–—−]",
+            "replace": "--",
+        },
+        "change_ellipse": {
+            "find": "[…]",
+            "replace": "...",
+        }
+    }
+}
