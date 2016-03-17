@@ -1,4 +1,3 @@
-
 def stripToc(input):
 
     # Assume input list split at lines
