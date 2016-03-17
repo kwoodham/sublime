@@ -2,95 +2,62 @@
 
 import pypandoc
 import argparse
-import os
+import sys
+import re
+from strip_toc import stripToc
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--notoc", help="No TOC (default)", action="store_true")
 parser.add_argument("-t", "--toc", help="Include TOC", action="store_true")
-parser.add_argument("-b", "--bib", help="Bibliograpy", type=str)
-parser.add_argument("input", help="input file", type=str)
+parser.add_argument("-b", "--bib", help="Bibliograpy", metavar='in-file', type=argparse.FileType('rt'),required=False)
+parser.add_argument("-i", "--input", help="input file", metavar='in-file', type=argparse.FileType('rt'),required=True)
 args = parser.parse_args()
 
-# Check args (probably some way to do this automagically)
+PDOPTS = ''
+PDOPTS = PDOPTS + '--from markdown+simple_tables+auto_identifiers --smart --standalone '
+PDOPTS = PDOPTS + '--include-in-header=$HOME/css/markdown.css '
+
+if (args.bib):
+    PDOPTS = PDOPTS + ' --bibliography=' + args.bib + ' --csl ieee'
+
 if (args.toc and args.notoc):
     print("Use either --toc or --notoc (not both). See -h")
     sys.exit()
 
-cwd = os.getcwd()
-i_file = cwd + os.path.basename(args.input)
-o_file = i_file.replace('.md','.html')
-
-P = []
-P. append(['\[\[([-0-9A-Za-z]+)\]\]', '[\\1](\\1.html)'])
-
-PDOPTS = ''
-PDOPTS = PDOPTS + ' --from markdown+simple_tables+auto_identifiers' 
-PDOPTS = PDOPTS + ' --smart --standalone'
-PDOPTS = PDOPTS + ' --include-in-header=$HOME/css/markdown.css'
-
 if (args.toc):
     PDOPTS = PDOPTS + ' --toc'
 
-if (args.bib): 
 
-# Form sed string - first for critic markups
-SEDSTR=''
-SEDSTR=$SEDSTR's/{++/<ins>/g;s/++}/<\/ins>/g'
-SEDSTR=$SEDSTR';s/{--/<del>/g;s/--}/<\/del>/g'
-SEDSTR=$SEDSTR';s/{~~/<del>/g;s/~>/<\/del><ins>/g;s/~~}/<\/ins>/g'
-SEDSTR=$SEDSTR';s/{>>/<span class="critic comment">/g;s/<<}/<\/span>/g'
-SEDSTR=$SEDSTR';s/{==/\<mark>/g;s/==}/<\/mark>/g'
+def preProcessMarkups(input_text):
 
-# Now for "panproc" link changes
-SEDSTR=$SEDSTR';s/\[\[\([-0-9A-Za-z]\{1,\}\)\(\]\]\)/[\1](.\/\1.html)/g'
-SEDSTR=$SEDSTR';s/.md)/.html)/g'
-SEDSTR=$SEDSTR';s/.md#/.html#/g'
-SEDSTR=$SEDSTR';s/.md$/.html/g'
+    P = []
+    P.append(['\[\[([\w-]+)\]\]', '[\\1](\\1.html)'])  # Links should match [a-zA-Z0-9_-]
+    P.append(['.md\)', '.html)'])
+    P.append(['.md\#', '.html#'])
+    P.append(['.md$', '.html'])
 
-# Check to see if there is a need to process MarkdownTOC content
-temp=$(grep "MarkdownTOC" $1)
+    P.append(['\{\+\+([ \w,.-]+)\+\+\}', '<ins>\\1</ins>'])
+    P.append(['\{\-\-([ \w,.-]+)\-\-\}', '<del>\\1</del>'])
+    P.append(['\{\=\=([ \w,.-]+)\=\=\}', '<mark>\\1</mark>'])
+    P.append(['\{\>\>([ \w,.-]+)\<\<\}', '<span class="critic comment">\\1</span>'])
+    P.append(['\{\~\~([ \w,.-]+)\~\>([ \w,.-]+)\~\~\}', '<del>\\1</del><ins>\\2</ins>'])
 
-if [ ${#temp} -gt 0 ]
-    then 
-		# Remove MarkdownTOC lines and store results in ".tmp" before sec/pandoc
-		$HOME/.local/bin/strip_toc.py "$DIR/$TARGET".md
-		sed "$SEDSTR" "$DIR/$TARGET".tmp | pandoc $PDOPTS -o "$DIR/$TARGET".html
-		rm -f "$DIR/$TARGET".tmp
-	else
-		sed "$SEDSTR" < $1 | pandoc $PDOPTS -o "$DIR/$TARGET".html
-fi
+    f1 = []
+    for line in input_text:
+        for i in range(0, len(P)):
+            line = re.sub(P[i][0], P[i][1], line)
+        f1.append(line)
 
-# Take out pandoc's style line that keeps code text from wrapping
-sed -i '/<style type=/d' "$DIR/$TARGET".html
+    return f1
 
 
->>> r1 = '\[\[([a-z]+)'
->>> temp2 = re.sub(r1,r2,temp)
->>> temp2
-'1]]'
->>> r2 = '\[\\1'
->>> temp2 = re.sub(r1,r2,temp)
->>> temp2
-'\\[this]]'
->>> r2 = '\\1'
->>> temp2 = re.sub(r1,r2,temp)
->>> temp2
-'this]]'
->>> temp2 = re.sub(r1,r2,temp)
->>> r1 = '\[\[([a-z]+)\]\]'
->>> temp2 = re.sub(r1,r2,temp)
->>> temp2
-'this'
->>> r2 = '\[\\1\]'
->>> temp2 = re.sub(r1,r2,temp)
->>> temp2
-'\\[this\\]'
->>> r2 = '[\\1]'
->>> temp2 = re.sub(r1,r2,temp)
->>> temp2
-'[this]'
->>> r2 = '[\\1](\\1.html)'
->>> temp2 = re.sub(r1,r2,temp)
->>> temp2
-'[this](this.html)'
->>>
+in_file = args.input
+in_text = in_file.read()
+in_text = in_text.split('\n')
+in_file.close()
+
+out_text = preProcessMarkups(in_text)
+out_text = stripToc(out_text)
+
+for line in out_text:
+    print(line)
