@@ -63,7 +63,8 @@ if __name__ == '__main__':
         PDOPTS.append('--toc')
 
     if (not args.output):
-        args.output = args.input.name.split('.')[0] + '.html'
+        fname, fext = os.path.splitext(args.input.name)
+        args.output = fname + '.html'
 
     in_file = args.input
     in_text = in_file.read()
@@ -85,6 +86,8 @@ if __name__ == '__main__':
     # Take out offending style line put in by pandoc - written out to
     # a file, so we have to read it back in.
     # UTF-8 encoding require to support --smart switch on pandoc.
+    # Probably is easier to read/write with one open, but I do an
+    # intermediate close/open
 
     f = open(args.output, 'r', encoding='utf-8')
     a = f.read()
