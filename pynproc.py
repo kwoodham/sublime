@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python3
 
 import pypandoc
 import argparse
@@ -13,19 +13,21 @@ parser.add_argument("-b", "--bib", help="Bibliograpy", metavar='in-file', type=a
 parser.add_argument("-i", "--input", help="input file", metavar='in-file', type=argparse.FileType('rt'),required=True)
 args = parser.parse_args()
 
-PDOPTS = ''
-PDOPTS = PDOPTS + '--from markdown+simple_tables+auto_identifiers --smart --standalone '
-PDOPTS = PDOPTS + '--include-in-header=$HOME/css/markdown.css '
+PDOPTS = []
+PDOPTS.append('--from=markdown+simple_tables+header_attributes')
+PDOPTS.append('--smart')
+PDOPTS.append('--standalone')
+# PDOPTS.append('--include-in-header=$HOME/css/markdown.css')
 
 if (args.bib):
-    PDOPTS = PDOPTS + ' --bibliography=' + args.bib + ' --csl ieee'
+    PDOPTS.append('--bibliography=' + args.bib + ' --csl ieee')
 
 if (args.toc and args.notoc):
     print("Use either --toc or --notoc (not both). See -h")
     sys.exit()
 
 if (args.toc):
-    PDOPTS = PDOPTS + ' --toc'
+    PDOPTS.append('--toc')
 
 
 def preProcessMarkups(input_text):
@@ -50,7 +52,6 @@ def preProcessMarkups(input_text):
 
     return f1
 
-
 in_file = args.input
 in_text = in_file.read()
 in_text = in_text.split('\n')
@@ -58,6 +59,8 @@ in_file.close()
 
 out_text = preProcessMarkups(in_text)
 out_text = stripToc(out_text)
+out_text = '\n'.join(out_text)
 
-for line in out_text:
-    print(line)
+out_html = pypandoc.convert(out_text, to='html', format='md', extra_args=PDOPTS)
+
+print(out_html)
