@@ -37,59 +37,60 @@ def preProcessMarkups(input_text):
 
     return f1
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-n", "--notoc", help="No TOC (default)", action="store_true")
-parser.add_argument("-t", "--toc", help="Include TOC", action="store_true")
-parser.add_argument("-b", "--bib", help="Bibliograpy", metavar='in-file', type=argparse.FileType('rt'),required=False)
-parser.add_argument("-i", "--input", help="input file", metavar='in-file', type=argparse.FileType('rt'),required=True)
-parser.add_argument("-o", "--output", help="output file (default is input.html)", type=str,required=False )
-args = parser.parse_args()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-n", "--notoc", help="No TOC (default)", action="store_true")
+    parser.add_argument("-t", "--toc", help="Include TOC", action="store_true")
+    parser.add_argument("-b", "--bib", help="Bibliograpy", metavar='in-file', type=argparse.FileType('rt'),required=False)
+    parser.add_argument("-i", "--input", help="input file", metavar='in-file', type=argparse.FileType('rt'),required=True)
+    parser.add_argument("-o", "--output", help="output file (default is input.html)", type=str,required=False )
+    args = parser.parse_args()
 
-PDOPTS = []
-PDOPTS.append('--from=markdown+simple_tables+auto_identifiers') # These might be default anyhow
-PDOPTS.append('--smart')
-PDOPTS.append('--standalone')
-PDOPTS.append('--include-in-header=' + os.path.expanduser('~') + '/css/markdown.css')
+    PDOPTS = []
+    PDOPTS.append('--from=markdown+simple_tables+auto_identifiers')  # These might be default anyhow
+    PDOPTS.append('--smart')
+    PDOPTS.append('--standalone')
+    PDOPTS.append('--include-in-header=' + os.path.expanduser('~') + '/css/markdown.css')
 
-if (args.bib):
-    PDOPTS.append('--bibliography=' + args.bib + ' --csl ieee')
+    if (args.bib):
+        PDOPTS.append('--bibliography=' + args.bib + ' --csl ieee')
 
-if (args.toc and args.notoc):
-    print("Use either --toc or --notoc (not both). See -h")
-    sys.exit()
+    if (args.toc and args.notoc):
+        print("Use either --toc or --notoc (not both). See -h")
+        sys.exit()
 
-if (args.toc):
-    PDOPTS.append('--toc')
+    if (args.toc):
+        PDOPTS.append('--toc')
 
-if (not args.output):
-    args.output = args.input.name.split('.')[0] + '.html'
+    if (not args.output):
+        args.output = args.input.name.split('.')[0] + '.html'
 
-in_file = args.input
-in_text = in_file.read()
-in_text = in_text.split('\n')
-in_file.close()
+    in_file = args.input
+    in_text = in_file.read()
+    in_text = in_text.split('\n')
+    in_file.close()
 
-out_text = preProcessMarkups(in_text)
-out_text = stripToc(out_text)
-out_text = addAnchors(out_text)
+    out_text = preProcessMarkups(in_text)
+    out_text = stripToc(out_text)
+    out_text = addAnchors(out_text)
 
-out_text = '\n'.join(out_text)
+    out_text = '\n'.join(out_text)
 
-out_html = pypandoc.convert(
-    out_text,
-    to='html', format='md',
-    outputfile=args.output,
-    extra_args=PDOPTS)
+    out_html = pypandoc.convert(
+        out_text,
+        to='html', format='md',
+        outputfile=args.output,
+        extra_args=PDOPTS)
 
-# Take out offending style line put in by pandoc - written out to
-# a file, so we have to read it back in.
-# UTF-8 encoding require to support --smart switch on pandoc.
+    # Take out offending style line put in by pandoc - written out to
+    # a file, so we have to read it back in.
+    # UTF-8 encoding require to support --smart switch on pandoc.
 
-f = open(args.output, 'r', encoding='utf-8')
-a = f.read()
-f.close()
-loc_beg = a.find('  <style type="text/css">')
-loc_end = a.find('</style>', loc_beg) + int(9)  # length of the close tag + 1 space
-f = open(args.output, 'w', encoding='utf-8')
-f.write(a[:loc_beg] + a[loc_end:])
-f.close()
+    f = open(args.output, 'r', encoding='utf-8')
+    a = f.read()
+    f.close()
+    loc_beg = a.find('  <style type="text/css">')
+    loc_end = a.find('</style>', loc_beg) + int(9)  # length of the close tag + 1 space
+    f = open(args.output, 'w', encoding='utf-8')
+    f.write(a[:loc_beg] + a[loc_end:])
+    f.close()
