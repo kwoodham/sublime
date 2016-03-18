@@ -41,9 +41,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--notoc", help="No TOC (default)", action="store_true")
     parser.add_argument("-t", "--toc", help="Include TOC", action="store_true")
-    parser.add_argument("-b", "--bib", help="Bibliograpy", metavar='in-file', type=argparse.FileType('rt'),required=False)
-    parser.add_argument("-i", "--input", help="input file", metavar='in-file', type=argparse.FileType('rt'),required=True)
-    parser.add_argument("-o", "--output", help="output file (default is input.html)", type=str,required=False )
+    parser.add_argument("-s", "--strip", help="Strip MarkdownTOC", action="store_true")
+    parser.add_argument("-b", "--bib", help="Bibliograpy", metavar='in-file', type=argparse.FileType('rt'), required=False)
+    parser.add_argument("-i", "--input", help="input file", metavar='in-file', type=argparse.FileType('rt'), required=True)
+    parser.add_argument("-o", "--output", help="output file (default is input.html)", type=str, required=False)
     args = parser.parse_args()
 
     PDOPTS = []
@@ -73,7 +74,8 @@ if __name__ == '__main__':
     in_file.close()
 
     out_text = preProcessMarkups(in_text)
-    out_text = stripToc(out_text)
+    if (args.strip):
+        out_text = stripToc(out_text)
     out_text = addAnchors(out_text)
 
     out_text = '\n'.join(out_text)
