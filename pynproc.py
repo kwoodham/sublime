@@ -42,8 +42,14 @@ if __name__ == '__main__':
     parser.add_argument("-n", "--notoc", help="No TOC (default)", action="store_true")
     parser.add_argument("-t", "--toc", help="Include TOC", action="store_true")
     parser.add_argument("-s", "--strip", help="Strip MarkdownTOC", action="store_true")
-    parser.add_argument("-b", "--bib", help="Bibliograpy", metavar='in-file', type=argparse.FileType('rt'), required=False)
-    parser.add_argument("-i", "--input", help="input file", metavar='in-file', type=argparse.FileType('rt'), required=True)
+    parser.add_argument(
+        "-b", "--bib", help="Bibliograpy",
+        metavar='in-file', type=argparse.FileType('rt', encoding='utf-8'),
+        required=False)
+    parser.add_argument(
+        "-i", "--input", help="input file",
+        metavar='in-file', type=argparse.FileType('rt', encoding='utf-8'),
+        required=True)
     parser.add_argument("-o", "--output", help="output file (default is input.html)", type=str, required=False)
     args = parser.parse_args()
 
@@ -62,6 +68,7 @@ if __name__ == '__main__':
 
     if (args.toc):
         PDOPTS.append('--toc')
+        PDOPTS.append('--toc-depth=5')
 
     if (not args.output):
         fname, fext = os.path.splitext(args.input.name)
