@@ -17,16 +17,19 @@ from add_anchors import addAnchors
 def preProcessMarkups(input_text):
 
     P = []
+
+    # Wiki-style links, and links to other Markdown files (with or without anchors)
     P.append(['\[\[([\w-]+)\]\]', '[\\1](./\\1.html)'])  # Links should match [a-zA-Z0-9_-]
     P.append(['.md\)', '.html)'])
     P.append(['.md\#', '.html#'])
     P.append(['.md$', '.html'])
 
+    # Critic markups (1) pattern (2) html-show
     P.append(['\{\+\+([\S\s]+?)\+\+\}', '<ins>\\1</ins>'])
     P.append(['\{\-\-([\S\s]+?)\-\-\}', '<del>\\1</del>'])
     P.append(['\{\=\=([\S\s]+?)\=\=\}', '<mark>\\1</mark>'])
     P.append(['\{\>\>([\S\s]+?)\<\<\}', '<span class="critic comment">\\1</span>'])
-    P.append(['\{\>\>\<\<\}', '<span class="critic comment"></span>'])
+    P.append(['\{\>\>\<\<\}', '<span class="critic comment"></span>'])  # empty comments
     P.append(['\{\~\~([\S\s]+?)\~\>([\S\s]+?)\~\~\}', '<del>\\1</del><ins>\\2</ins>'])
 
     f1 = []
@@ -50,7 +53,10 @@ if __name__ == '__main__':
         "-i", "--input", help="input file",
         metavar='in-file', type=argparse.FileType('rt', encoding='utf-8'),
         required=True)
-    parser.add_argument("-o", "--output", help="output file (default is input.html)", type=str, required=False)
+    parser.add_argument(
+        "-o", "--output", help="output file (default is input.html)",
+        type=str,
+        required=False)
     args = parser.parse_args()
 
     PDOPTS = []
