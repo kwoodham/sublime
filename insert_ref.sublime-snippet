@@ -1,0 +1,10 @@
+<snippet>
+	<!-- http://stackoverflow.com/questions/23617043/ -->
+	<!-- sublime-snippet-to-get-a-title-case-field-mirrored-as-a-lowercase -->
+	<!-- user for referencing a subtopic within the namespace -->
+	<content><![CDATA[
+[${1:Ref}](./${1/(.*)/\L\1\E/i}/index.md)
+]]></content>
+	<tabTrigger>ref</tabTrigger>
+	<scope>text.html.markdown</scope>
+</snippet>
