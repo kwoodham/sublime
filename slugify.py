@@ -10,13 +10,18 @@ import os
 # this has to be inported using:
 #
 # from User.slugify import slugify
+#
+# 2016-03-21 took out the "+" in the last re so that "text - text" would
+# be rendered  "text---text" in agreement with how pandoc generates the
+# html anchors.
 
 
 def slugify(value, separator):
     """ Slugify a string, to make it URL friendly. """
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
     value = re.sub('[^\w\s-]', '', value.decode('ascii')).strip().lower()
-    return re.sub('[%s\s]+' % separator, separator, value)
+    # return re.sub('[%s\s]+' % separator, separator, value)
+    return re.sub('[%s\s]' % separator, separator, value)
 
 if __name__ == '__main__':
     fileName, fileExt = os.path.splitext(str(sys.argv[1]))
