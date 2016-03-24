@@ -231,6 +231,7 @@ Not that I've pulled tasks into my wiki that I want to track there, I want to be
 
 To do this, I wrote `task_interface` to bring up a sorted list of tasks _from the current namespace down_.  So running this from the top level `index.md` will give all tasks from all projects, journals, etc..., and running it from the `index.md` file in a particular year namespace within the journal side of the wiki only finds the tasks associated with that year.  When running `task_interface` you select `@task`, `@pend`, or `@done` for that namespace and the plugin return a clickable list - select one and ST3 will open that page centered on that item. I generally follow the task definition line with other descriptive text, or time-tagged entries of progress on the task, so this way I can go to a todo and quick get oriented on where it stands. 
 
+<font color='red'>Important Note</font>My task processing just pulls in items from a `todo.txt` file so that they can provide some context for work captured in the wiki.  You will still need to manage the state of the task manually (text editing the `todo.txt` file directly) or through the use of a tool.  My two favorite `todo.txt` tools are [topydo][] (platform independent) and [todotxt.net][todotxtnet] (Windows).
 
 Because `todo_interface`, `task_toggle` and `task_interface` aren't specifically "wiki" commands, I have them in a different key-binding structure:
 
@@ -297,6 +298,8 @@ This pretty much wraps up my wiki system.  I use these scripts on Linux and Wind
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 
 [todo]: http://todotxt.com/
+[topydo]: https://github.com/bram85/topydo
+[todotxtnet]: http://benrhughes.github.io/todotxt.net/
 [st3]: http://www.sublimetext.com/3
 [api]: http://www.sublimetext.com/docs/3/api_reference.html
 [md]: http://daringfireball.net/projects/markdown/syntax
