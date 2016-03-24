@@ -26,7 +26,7 @@
 <a name="introduction"></a>
 ## Introduction
 
-This repository maintains a set of [Sublime Text 3][st3] (hereafter: ST3) Python scripts that I  developed to manage my personal workflow using the [ST3 API][api].  My intent was to set up a "wiki" capability that allows me to create and capture links between documents and headers (in the same document or other documents) and handle tasks within my pages (outstanding, pending, and done).
+This repository maintains a set of [Sublime Text 3][st3] (hereafter: ST3) Python scripts that I  developed to manage my personal workflow using the [ST3 API][api].  My intent was to set up a "wiki" capability that allows me to create and capture links between documents and headers (in the same document or other documents) and handle [todo.txt][todotxt] tasks within my pages (annotated as current, pending, and done).
 
 All wiki pages are in [Markdown][md].
 
@@ -213,24 +213,36 @@ Because `index_check` is an every-once-in-a-while command, I haven't bothered to
 <a name="tasks"></a>
 ## Tasks
 
-I have implemented a really simple system for tracking tasks.  If you tag something in your markdown as `@task`, which I usually do at the beginning the a line, with descriptive text following:
+This section has evolved a bit for me: I've used full fledged task managers before, and there were a bit overkill, then I tried having just text based tasks within my journal: this kept me from having a task list outside of the wiki.  So I finally settled on writing a script that would import tasks from `todo.txt` formatted files (maintained outside of the wiki), and then provide me with a way to mark them in the wiki as `pending` or `done`.  This way I can associated the work I'm doing with a task from my `todo.txt` file with additional descriptive texts, files, etc... within my wiki - which is something that I can't do in my `todo.txt` file.
+
+To get a task pasted from my `toto.txt` list into my wiki, I developed a `todo_interface` command with an associated `TodoInterface.sublime-settings` configuration file.  Kicking off the command queries the `@context` list, then (for the selected context) the `+project` tags, and returns a list of todo items for that project.  Selecting one will copy the text into the cursor location in ST3.  
+
+At this point, the task is just text, adn I'd have no way of distinguishing it from any other content.  To address this, I have implemented a really simple system for tracking tasks in the wiki: tasks are tagged as at the beginning the line as:
 
 ```
-@task - writeup the wiki commands
+@task `(task text from todo.txt)`
+@pend `(task text from todo.txt)`
+@done <s>`(task text from todo.txt)`</s>
 ```
 
-Then use `task_interface` to bring up a sorted list of tasks _from the current namespace down_.  So running this from the top level `index.md` will give all tasks from all projects, journals, etc..., and running it from the `index.md` file in a particular year namespace within the journal side of the wiki only finds the tasks associated with that year.
+So - once the text from `todo.txt` file is imported, I use `task_toggle` to pre-pend the `@task`.  If a task is pending someone else's input, and you want to get it off of your radar screen, change the tag to `@pend` by running `task_toggle` again.  Then run it one more time to change to `@done`. The command `task_toggle` just loops through `@task` -> `@pend` -> `@done` states so if you need to reopen a closed task, or inadvertently moved it to the wrong state, just cycle back through.
 
-Note that the list of tasks is click-able, so you can go directly to the task definition.  I generally follow the task definition line with other descriptive text, or time-tagged entries of progress on the task.  Note that I've generated a time-tagging command `pop_date` that allows you to enter date, time or date/time strings in a few different styles directly into the text you are typing.
+Not that I've pulled tasks into my wiki that I want to track there, I want to be able to query my wiki for tasks that I've been working on - maybe I've marked one as `@pend` and I can go look at the associated notes to see what I'm waiting on, or maybe I have to fill out an accomplishments report, and I can look at all of the `@done` tasks.
 
-After a task is completed, change the `@task` to `@done` (and maybe enter some time-tagged text regarding its closure).  If a task is pending someone else's input, and you want to get it off of your radar screen, change the tag to `@pend`.
+To do this, I wrote `task_interface` to bring up a sorted list of tasks _from the current namespace down_.  So running this from the top level `index.md` will give all tasks from all projects, journals, etc..., and running it from the `index.md` file in a particular year namespace within the journal side of the wiki only finds the tasks associated with that year.  When running `task_interface` you select `@task`, `@pend`, or `@done` for that namespace and the plugin return a clickable list - select one and ST3 will open that page centered on that item. I generally follow the task definition line with other descriptive text, or time-tagged entries of progress on the task, so this way I can go to a todo and quick get oriented on where it stands. 
 
-Note that the `task_interface` command lets you selected one of the three tags and generates the click-able list.  So you can quickly reference a completed task, or look at a list of pending tasks on which you are awaiting input from someone else.  
 
-Because the `task_interface` and `pop_date` commands aren't specifically "wiki" items, I have them in a different key-binding structure:
+Because `todo_interface`, `task_toggle` and `task_interface` aren't specifically "wiki" commands, I have them in a different key-binding structure:
 
 ```
-{ "keys": ["ctrl+super+t"], "command": "task_interface" },
+	{ "keys": ["ctrl+super+t"], "command": "todo_interface" },
+	{ "keys": ["ctrl+super+y"], "command": "task_interface" },
+	{ "keys": ["ctrl+super+u"], "command": "task_toggle" }
+```
+
+Note that I've generated a time-tagging command `pop_date` that allows you to enter date, time or date/time strings in a few different styles directly into the text you are typing.  This makes time-tagging a task status annotation very easy. (Again, I usually do this starting the next line or two below the task.) My key-binding for this is
+
+```
 { "keys": ["ctrl+alt+d"], "command": "pop_date" },
 ``` 
 
@@ -264,15 +276,18 @@ This pretty much wraps up my wiki system.  I use these scripts on Linux and Wind
 | `form_index.py`               | Paste in a road-map to navigate back up the wiki structure          |
 | `index_check.py`              | Check for bad links, widows and orphans                             |
 | `IndexCheck.sublime-settings` | Configuration file for index check                                  |
-| `OpenInApp.sublime-settings`  | Configuration file for open-in-app                                  |
 | `link_to_heading.py`          | Puts a link to the selected heading in the copy/paste buffer        |
 | `paste_wiki_link.py`          | Pastes the above link in the selected location as a relative path   |
 | `open_in_app.py`              | Opens a particular type of file (ext specific) with defined app     |
 | `open_link_under_cursor.py`   | Opens the Markdown file defined under the cursor                    |
+| `OpenInApp.sublime-settings`  | Configuration file for open-in-app                                  |
 | `toc_jump.py`                 | Show list of headings in view - select to center                    |
 | `pop_date.py`                 | Give a variety of date and date/time strings to paste into text     |
 | `show_instances.py`           | Supports task interface - lists instances of the selected tag       |
 | `slugify.py`                  | Supports link development - slugifies the links                     |
+| `todo_interface.py`           | Select a `todo.txt` item for import into the page                   |
+| `TodoInterface.sublime-settings ` | Configuration file for todo_interface. |
+| `task_toggle.py`              | Prepend a `todo.txt` item with @task, @pend or @done                |
 | `task_interface.py`           | Select @task, @done, or @pending task list in the current namespace |
 | `goto_today.py`               | Pop to current week journal page and advance to correct day heading |
 
@@ -281,6 +296,7 @@ This pretty much wraps up my wiki system.  I use these scripts on Linux and Wind
 
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 
+[todo]: http://todotxt.com/
 [st3]: http://www.sublimetext.com/3
 [api]: http://www.sublimetext.com/docs/3/api_reference.html
 [md]: http://daringfireball.net/projects/markdown/syntax
