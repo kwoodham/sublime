@@ -269,27 +269,27 @@ This pretty much wraps up my wiki system.  I use these scripts on Linux and Wind
 <a name="script-summary"></a>
 ## Script summary
 
-| Script                        | Purpose                                                             |
-| ----------------------------- | ----------------------------------------------------------          |
-| `new_year.py`                 | Generate a year index file with links to each week                  |
-| `wiki_template.py`            | Populate a week's page with day headers, etc...                     |
-| `form_index.py`               | Paste in a road-map to navigate back up the wiki structure          |
-| `index_check.py`              | Check for bad links, widows and orphans                             |
-| `IndexCheck.sublime-settings` | Configuration file for index check                                  |
-| `link_to_heading.py`          | Puts a link to the selected heading in the copy/paste buffer        |
-| `paste_wiki_link.py`          | Pastes the above link in the selected location as a relative path   |
-| `open_in_app.py`              | Opens a particular type of file (ext specific) with defined app     |
-| `open_link_under_cursor.py`   | Opens the Markdown file defined under the cursor                    |
-| `OpenInApp.sublime-settings`  | Configuration file for open-in-app                                  |
-| `toc_jump.py`                 | Show list of headings in view - select to center                    |
-| `pop_date.py`                 | Give a variety of date and date/time strings to paste into text     |
-| `show_instances.py`           | Supports task interface - lists instances of the selected tag       |
-| `slugify.py`                  | Supports link development - slugifies the links                     |
-| `todo_interface.py`           | Select a `todo.txt` item for import into the page                   |
-| `TodoInterface.sublime-settings ` | Configuration file for todo_interface. |
-| `task_toggle.py`              | Prepend a `todo.txt` item with @task, @pend or @done                |
-| `task_interface.py`           | Select @task, @done, or @pending task list in the current namespace |
-| `goto_today.py`               | Pop to current week journal page and advance to correct day heading |
+| Script                            | Purpose                                                             |
+| -----------------------------     | ----------------------------------------------------------          |
+| `new_year.py`                     | Generate a year index file with links to each week                  |
+| `wiki_template.py`                | Populate a week's page with day headers, etc...                     |
+| `form_index.py`                   | Paste in a road-map to navigate back up the wiki structure          |
+| `index_check.py`                  | Check for bad links, widows and orphans                             |
+| `IndexCheck.sublime-settings`     | Configuration file for `index_check`                                |
+| `link_to_heading.py`              | Puts a link to the selected heading in the copy/paste buffer        |
+| `paste_wiki_link.py`              | Pastes the above link in the selected location as a relative path   |
+| `open_in_app.py`                  | Opens a particular type of file (ext specific) with defined app     |
+| `open_link_under_cursor.py`       | Opens the Markdown file defined under the cursor                    |
+| `OpenInApp.sublime-settings`      | Configuration file for `open-in-app`                                |
+| `toc_jump.py`                     | Show list of headings in view - select to center                    |
+| `pop_date.py`                     | Give a variety of date and date/time strings to paste into text     |
+| `slugify.py`                      | Supports link development - slugifies the links                     |
+| `todo_interface.py`               | Select a `todo.txt` item for import into the page                   |
+| `TodoInterface.sublime-settings ` | Configuration file for todo_interface.                              |
+| `task_toggle.py`                  | Prepend a `todo.txt` item with @task, @pend or @done                |
+| `task_interface.py`               | Select @task, @done, or @pending task list in the current namespace |
+| `show_instances.py`               | Supports `task_interface` - lists instances of the selected tag     |
+| `goto_today.py`                   | Pop to current week journal page and advance to correct day heading |
 
 <a name="release"></a>
 ## Release
