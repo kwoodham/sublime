@@ -26,7 +26,7 @@
 <a name="introduction"></a>
 ## Introduction
 
-This repository maintains a set of [Sublime Text 3][st3] (hereafter: ST3) Python scripts that I  developed to manage my personal workflow using the [ST3 API][api].  My intent was to set up a "wiki" capability that allows me to create and capture links between documents and headers (in the same document or other documents) and handle [todo.txt][todotxt] tasks within my pages (annotated as current, pending, and done).
+This repository maintains a set of [Sublime Text 3][st3] (hereafter: ST3) Python scripts that I  developed to manage my personal workflow using the [ST3 API][api].  My intent was to set up a "wiki" capability that allows me to create and capture links between documents and headers (in the same document or other documents) and handle [todo.txt][todo] tasks within my pages (annotated as current, pending, and done).
 
 All wiki pages are in [Markdown][md].
 
