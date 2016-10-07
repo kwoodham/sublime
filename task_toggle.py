@@ -18,8 +18,11 @@ class TaskToggleCommand(sublime_plugin.TextCommand):
                 self.view.replace(edit, lin, text.replace("@task", "@pend"))
                 return
             elif text[:5] == "@pend":
-                text = text.replace("@pend ", "@done <s>") + "</s>"
+                text = text.replace("@pend ", "@push <s>") + "</s>"
                 self.view.replace(edit, lin, text)
+                return
+            elif text[:5] == "@push":
+                self.view.replace(edit, lin, text.replace("@push", "@done"))
                 return
             elif text[:5] == "@done":
                 text = text.replace("@done <s>", "@task ")

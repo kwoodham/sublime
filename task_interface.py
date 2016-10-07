@@ -9,6 +9,7 @@ class TaskInterfaceCommand(sublime_plugin.TextCommand):
         self.a.append("@task")
         self.a.append("@done")
         self.a.append("@pend")
+        self.a.append("@push")
         # timeout fix at https://github.com/tosher/Mediawiker/blob/master/mediawiker.py
         sublime.set_timeout(lambda: self.view.window().show_quick_panel(self.a, self.on_done), 1)
 

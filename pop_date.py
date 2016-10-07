@@ -13,6 +13,7 @@ class PopDateCommand(sublime_plugin.TextCommand):
         PopDateCommand.globalEdit = edit
         self.a = []
         self.a.append(time.strftime("%Y%m%d"))
+        self.a.append(time.strftime("%Y-%m-%d"))
         self.a.append(time.strftime("%d %b %Y"))
         self.a.append(time.strftime("%B %d, %Y"))
         self.a.append(time.strftime("%A, %B %d, %Y"))
