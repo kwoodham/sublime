@@ -20,11 +20,16 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
         for line in TodoInterfaceCommand.l:
             l1 = line.find(' @')  # space before context
             if l1 > 0:
-                l1 = l1+1  # move pointer to "@"
+                l1 = l1 + 1  # move pointer to "@"
                 l2 = line.find(' ', l1)
                 if l2 < 0:
                     l2 = len(line)
-            self.c.append(line[l1:l2])
+                self.c.append(line[l1:l2])
+            else:  # In case there is no category, then we want to capture, and annotate the local copy
+                self.c.append('(uncategorized)')
+                line_loc = TodoInterfaceCommand.l.index(line)
+                line = line + ' (uncategorized)'
+                TodoInterfaceCommand.l[line_loc] = line
         self.c = list(set(self.c))
         self.c.sort()
         self.view.window().show_quick_panel(self.c, self.on_done1)
