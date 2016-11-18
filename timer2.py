@@ -47,7 +47,7 @@ for x in range(1, args.count):
     if args.up:
         print("  minutes past: {:2d}".format(x), end='\r')  # space for cursor at beginning of line
     elif args.down:
-        print("  minutes left: {:2d}".format(args.count-x),  end='\r')
+        print("  minutes left: {:2d}".format(args.count - x), end='\r')
     else:
         print("something bad be happening: should not get here!")
         sys.exit()
@@ -57,6 +57,12 @@ time.sleep(60)
 if os.name == 'nt':
     import winsound
     print("\nTime!")
-    winsound.PlaySound("SystemExit", winsound.SND_ALIAS)
+    winsound.Beep(880, 500)
+    time.sleep(0.5)
+    winsound.Beep(880, 500)
+    time.sleep(0.5)
+    winsound.Beep(880, 500)
+    time.sleep(0.5)
+    winsound.Beep(1760, 1000)
 else:
     print("\nTime!", '\a')

@@ -4,6 +4,7 @@ import datetime
 
 
 class GotoTodayCommand(sublime_plugin.TextCommand):
+    newView = ()
 
     def run(self, edit):
         # root_dir is root of journal WRT project root. Assumes year
@@ -24,15 +25,19 @@ class GotoTodayCommand(sublime_plugin.TextCommand):
         outStr = b + root_dir + str(c) + "/" + outStr
 
         # If this is a current view switch and center, otherwise load
-        # the file and give a modest timeout before centering the view
+        # the file and have the event handler center the view when loaded
         isView = self.view.window().find_open_file(outStr)
         if isView:
             self.view.window().focus_view(isView)
-            GotoTodayCommand.center_today(isView)
+            GotoTodayCommand.newView = isView
+            GotoTodayCommand.center_today(GotoTodayCommand.newView)
         else:
-            newView = self.view.window().open_file(outStr)
-            sublime.set_timeout(lambda: GotoTodayCommand.center_today(newView), 500)
-            
+            GotoTodayCommand.newView = self.view.window().open_file(outStr)
+
+    class EventListener(sublime_plugin.EventListener):
+
+        def on_load_async(self, view):
+            GotoTodayCommand.center_today(GotoTodayCommand.newView)
 
     def center_today(view):
         a = "## " + datetime.date.today().strftime("%A, %B %d, %Y")
