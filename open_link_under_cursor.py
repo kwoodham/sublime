@@ -4,15 +4,23 @@ from User.slugify import slugify
 # Assume link is of form:
 # 	type 1: [[file without .md in cwd]]
 # 	type 2: [text](./relative/path/to/file.md)
-# 	type 3: [#link internal to file]
+# 	type 3: [#link internal to current file]
 # 	type 4: [text describing internal link](#slug)
-# 	type 5: [text describing external link](./path.md#slug)
+#   type 5: [text describing external link](./path.md#slug)
+
 # Assume that cursor is in the path or slug if last two forms
 # Assume that link is correctly formed
 # Assume that the path start with "." (always relative) and ends in ".md"
+# assume that links of type "[ref]:" are enclosed with "( )"
 
+# MOD1
 # Monday, August 03, 2015 - added in logic to link to heading of form:
 # ## This is a heading {#anchor}
+
+# MOD2
+# Thursday, February 02, 2017 - add in links of type:
+# [ref]: (link is here) which are variants of type 2 and 5
+
 
 class OpenLinkUnderCursorCommand(sublime_plugin.TextCommand):
     link = str('')
@@ -35,16 +43,13 @@ class OpenLinkUnderCursorCommand(sublime_plugin.TextCommand):
             self.view.window().open_file(pathName)
         elif lType == 2:
             pathName = text[(index[0]+1):index[1]]
-            # print(pathName)
             OpenLinkUnderCursorCommand.link = None
             self.view.window().open_file(pathName)
         elif lType == 3:
             self.link = slugify(text[(index[2]+1):index[3]], '-')
-            # print(self.link)
             set_location(self.view, self.link)
         elif lType == 4:
             self.link = slugify(text[(index[2]+1):index[3]], '-')
-            # print(self.link)
             set_location(self.view, self.link)
         else:
             pathName = text[(index[0]+1):index[1]]
@@ -117,7 +122,8 @@ def link_type(text, position):
         lType = int(1)
     elif text.rfind("](#", b1, position) != -1:
         lType = int(4)                      # type 4 has "](#" in middle
-    elif text.rfind("](.", b1, position) != -1:
+        # MOD2 - add in allowance for type "]: ("
+    elif ( text.rfind("](.", b1, position) ) or ( text.rfind("]: (.", b1, position) ) != -1:
         # have type 2 or 5 depending on "#" before closing ")"
         b2 = text.find(")", position)
         if text.find("#", b1, b2) != -1:
