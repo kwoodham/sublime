@@ -113,6 +113,8 @@ Notes:
 
 Keeping a time-based system of notes is important to my work-flow.  For me, having a separate page for each day is too much, and I have found that weekly pages is about right. Here are commands and key-bindings that I've developed according to how I like to operate. The commands assume that you are familiar with getting to the command line in ST3 using `(Ctrl-backtick)` 
 
+**Update 18 Oct 2017:** I used a year journal page in emacs `org-mode` this last year, and found that I liked it as a chronicle of daily activity that was housed in project-specific pages.  Accordingly, I've created `new_year_single` commands that create a `YEAR.md` file, and a companion `goto_today_single` command that operates with this single file rather than the weekly journal files.
+
 <a name="commands"></a>
 ### Commands
 
@@ -291,6 +293,8 @@ This pretty much wraps up my wiki system.  I use these scripts on Linux and Wind
 | `task_interface.py`               | Select @task, @done, or @pending task list in the current namespace |
 | `show_instances.py`               | Supports `task_interface` - lists instances of the selected tag     |
 | `goto_today.py`                   | Pop to current week journal page and advance to correct day heading |
+| `goto_today_single.py`            | Same but using a single `YEAR.md` journal page                      |
+
 
 <a name="release"></a>
 ## Release
