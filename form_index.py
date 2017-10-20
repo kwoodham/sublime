@@ -20,6 +20,10 @@ class FormIndex(sublime_plugin.TextCommand):
         e = e.replace('\\', '/')
         el = e.split("/")
 
+        ## Put in a header for the index at the current cursor location
+        end = self.view.sel()[0].b
+        end = end + self.view.insert(edit, end, "## Wiki Index\n\n")
+
         # Create path that climbs us the directory structure
         # leading "../" is dropped off in next for loop
         up = ''
@@ -27,7 +31,6 @@ class FormIndex(sublime_plugin.TextCommand):
             up = up + '../'
 
         # Write out the directory links as markdown bullets
-        end = self.view.sel()[0].b
         for i in range(len(el)-1, len(bl)-1):
             outStr = '- [' + bl[i] + '](' + up + 'index.md)\n'
             end = end + self.view.insert(edit, end, outStr)
