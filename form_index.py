@@ -22,7 +22,7 @@ class FormIndex(sublime_plugin.TextCommand):
 
         ## Put in a header for the index at the current cursor location
         end = self.view.sel()[0].b
-        end = end + self.view.insert(edit, end, "## Wiki Index\n\n")
+        end = end + self.view.insert(edit, end, "## Wiki Index\n")
 
         # Create path that climbs us the directory structure
         # leading "../" is dropped off in next for loop
