@@ -1,9 +1,6 @@
 import sublime_plugin
 import sublime
 import subprocess
-import os
-import platform
-
 
 class OpenInOlCommand(sublime_plugin.TextCommand):
 
