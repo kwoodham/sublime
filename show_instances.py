@@ -3,9 +3,12 @@ import sublime
 import os
 from operator import itemgetter  # 20150729 - support reverse sort (most recent top)
 
-# Looks for occurances of "stringToFind" in the directory
+# Looks for occurrences of "stringToFind" in the directory
 # of the view or below. Show each in the quick panel - provides
 # link to each instance.
+
+# 20171106 - change to state in list of states provided from "task_interface"
+# https://stackoverflow.com/questions/9542738/python-find-in-list
 
 
 class ShowInstancesCommand(sublime_plugin.TextCommand):
@@ -56,7 +59,9 @@ def findStr(self, top, stringToFind):
                 fn = 0  # Need to reference line number
                 for line in f:
                     fn = fn + 1
-                    if line.find(stringToFind) == (0):  # Only match at start of line
+                   # if line.find(stringToFind) == (0):  # Only match at start of line
+                    if line[0] == "@" and line.split(' ', 1)[0] in stringToFind:
+                        print(line)
                         n = n + int(1)
                         p0 = os.path.relpath(root)
                         relPath = os.path.relpath(p0, p1)
