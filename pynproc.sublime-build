@@ -1,0 +1,3 @@
+{
+	"shell_cmd": "C:\\Python34\\python.exe  C:\\msys64\\home\\kpwoodha\\.local\\bin\\pynproc.py --input $file"
+}

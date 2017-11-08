@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+| Date | State | Comment |
+| :--- | :---- | :------ |
+| ${0}     |       |         |
+]]></content>
+	<tabTrigger>!task</tabTrigger>
+</snippet>
