@@ -11,13 +11,13 @@ class TaskInterfaceCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         self.a = []
+        self.a.append("All-Active")
         self.a.append("@task")
         self.a.append("@next")
         self.a.append("@working")
         self.a.append("@waiting")
         self.a.append("@done")
-        self.a.append("All")
-        self.a.append("All-Active")
+
         # timeout fix at https://github.com/tosher/Mediawiker/blob/master/mediawiker.py
         sublime.set_timeout(lambda: self.view.window().show_quick_panel(self.a, self.on_done), 1)
 
@@ -25,12 +25,7 @@ class TaskInterfaceCommand(sublime_plugin.TextCommand):
         if index == -1:
             return
         print(self.a[index])
-        if self.a[index] == "All":
-            self.a.remove("All")
-            self.a.remove("All-Active")  
-            self.view.run_command("show_instances", {"args": {'text': self.a}})
         if self.a[index] == "All-Active":
-            self.a.remove("All")
             self.a.remove("All-Active")
             self.a.remove("@done")
             self.view.run_command("show_instances", {"args": {'text': self.a}})
