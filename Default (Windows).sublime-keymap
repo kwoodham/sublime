@@ -1,0 +1,41 @@
+[
+	{ "keys": ["ctrl+super+w"], "command": "toggle_setting", "args": {"setting": "word_wrap"}},
+	{ "keys": ["ctrl+super+z"], "command": "todo_interface" },
+	{ "keys": ["ctrl+super+y"], "command": "task_interface" },
+	{ "keys": ["ctrl+super+t"], "command": "task_toggle" },
+	{ "keys": ["ctrl+super+a"], "command": "open_in_app" },
+	{ "keys": ["ctrl+super+m"], "command": "open_in_ol" },
+	{ "keys": ["ctrl+super+g"], "command": "goto_today_single" },
+	{ "keys": ["ctrl+super+f"], "command": "form_index" },
+	{ "keys": ["ctrl+super+o"], "command": "open_link_under_cursor" },
+	{ "keys": ["ctrl+super+c"], "command": "link_to_heading" },
+	{ "keys": ["ctrl+super+v"], "command": "paste_wiki_link" },
+	{ "keys": ["ctrl+super+s"], "command": "create_subtopic" },
+	{ "keys": ["ctrl+super+l"], "command": "file_path" },
+	{ "keys": ["ctrl+super+h"], "command": "goto_index" },
+
+	{ "keys": ["ctrl+alt+d"], "command": "pop_date" },
+
+	{ "keys": ["tab"], "command": "smart_folding", "context": 
+		[
+			{ "key": "selector", "operator": "equal", "operand": "punctuation.definition.heading.begin.markdown" }
+		]
+	},
+
+	{ "keys": ["ctrl+super+b"], 
+		"command": "run_macro_file", 
+	    "args": {"file": "res://Packages/User/md_bold.sublime-macro"},
+	    "context":
+	       [
+	       	  { "key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown" }
+	       ]
+	},
+	{ "keys": ["ctrl+super+i"], 
+		"command": "run_macro_file", 
+	    "args": {"file": "res://Packages/User/md_italics.sublime-macro"},
+	    "context":
+	       [
+	       	  { "key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown" }
+	       ]
+	}
+]
