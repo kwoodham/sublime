@@ -4,6 +4,9 @@ import sublime
 # 20171106 - added in capability to choose all (including done) and all-active (not done state).
 # See corresponding way to search for inclusion in the list of states in "show_instances.py"
 
+# 20171108 - corrected last line to pass a single element list instead of a text string if
+# one item selected: self.a[index]  --> [self.a[index]]
+
 class TaskInterfaceCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
@@ -32,4 +35,4 @@ class TaskInterfaceCommand(sublime_plugin.TextCommand):
             self.a.remove("@done")
             self.view.run_command("show_instances", {"args": {'text': self.a}})
         else:
-            self.view.run_command("show_instances", {"args": {'text': self.a[index]}})
+            self.view.run_command("show_instances", {"args": {'text': [self.a[index]]}})

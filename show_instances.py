@@ -60,7 +60,7 @@ def findStr(self, top, stringToFind):
                 for line in f:
                     fn = fn + 1
                    # if line.find(stringToFind) == (0):  # Only match at start of line
-                    if line[0] == "@" and line.split(' ', 1)[0] in stringToFind:
+                    if ( line[0] == "@" ) and ( line.split(' ', 1)[0] in stringToFind ):
                         print(line)
                         n = n + int(1)
                         p0 = os.path.relpath(root)
