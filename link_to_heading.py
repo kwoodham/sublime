@@ -10,6 +10,10 @@ from User.slugify import slugify
 # kwoodham@gmail.com
 # 12 Jan 2015
 
+# 08 Nov 2017 - if the cursor is in a heading line, just
+# create a link with that line; otherwise, generate a drop-down
+# list of headers in the file to select from.
+
 
 class LinkToHeadingCommand(sublime_plugin.TextCommand):
 
@@ -21,9 +25,17 @@ class LinkToHeadingCommand(sublime_plugin.TextCommand):
             {"args": {'text': self.list[index]}})
 
     def run(self, edit):
-        locations = self.view.find_all('^[\#]+')
-        self.list = [self.view.substr(self.view.line(a)) for a in locations]
-        self.view.window().show_quick_panel(self.list, self.on_done)
+        # First see if we are in a header - if so, use it; otherwise
+        # generate a list of all links and call the quick panel
+        sel = self.view.sel()[0]
+        text = self.view.substr(self.view.line(sel))
+        if text[0] == "#":
+            self.view.run_command("generate_wiki_link",
+            {"args": {'text': text}})
+        else:
+            locations = self.view.find_all('^[\#]+')
+            self.list = [self.view.substr(self.view.line(a)) for a in locations]
+            self.view.window().show_quick_panel(self.list, self.on_done)
 
 
 class GenerateWikiLink(sublime_plugin.TextCommand):
