@@ -13,6 +13,7 @@
 	{ "keys": ["ctrl+super+s"], "command": "create_subtopic" },
 	{ "keys": ["ctrl+super+l"], "command": "file_path" },
 	{ "keys": ["ctrl+super+h"], "command": "goto_index" },
+	{ "keys": ["ctrl+super+j"], "command": "toc_jump" },
 
 	{ "keys": ["ctrl+alt+d"], "command": "pop_date" },
 
@@ -22,20 +23,13 @@
 		]
 	},
 
-	{ "keys": ["ctrl+super+b"], 
-		"command": "run_macro_file", 
-	    "args": {"file": "res://Packages/User/md_bold.sublime-macro"},
-	    "context":
-	       [
-	       	  { "key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown" }
-	       ]
+	{ "keys": ["ctrl+super+b"], "command": "insert_snippet", 
+	    "args": {"name": "Packages/User/md_bold.sublime-snippet"},
+	    "context": [{"key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown"}]
 	},
-	{ "keys": ["ctrl+super+i"], 
-		"command": "run_macro_file", 
-	    "args": {"file": "res://Packages/User/md_italics.sublime-macro"},
-	    "context":
-	       [
-	       	  { "key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown" }
-	       ]
+
+	{ "keys": ["ctrl+super+i"], "command": "insert_snippet", 
+	    "args": {"name": "Packages/User/md_italics.sublime-snippet"},
+	    "context": [{"key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown"}]
 	}
 ]
