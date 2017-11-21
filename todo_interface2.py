@@ -86,7 +86,7 @@ class TodoInterface2Command(sublime_plugin.TextCommand):
                 new_file.write(line + " assigned:1\n")
             else:
                 new_file.write(line + "\n")
-        new_file.close()
+        new_file.close() # mkstemp() path is still available
 
         # want to bail if we can't make a backup
         try:
@@ -94,7 +94,7 @@ class TodoInterface2Command(sublime_plugin.TextCommand):
         except:
             print("Error creating backup\n")
 
-        # if the backup was successful, delete to old todo file, and copy the new one into it
+        # if the backup was successful, remove the old todo file, and move the new one to it
         os.remove(TodoInterface2Command.todo_path)
         shutil.move(abs_path,TodoInterface2Command.todo_path)
        
