@@ -1,8 +1,8 @@
 [
 	{ "keys": ["ctrl+super+w"], "command": "toggle_setting", "args": {"setting": "word_wrap"}},
-	{ "keys": ["ctrl+super+z"], "command": "todo_interface" },
+	{ "keys": ["ctrl+super+z"], "command": "todo_interface2" },
 	{ "keys": ["ctrl+super+y"], "command": "task_interface" },
-	{ "keys": ["ctrl+super+t"], "command": "task_toggle" },
+	{ "keys": ["ctrl+super+t"], "command": "task_toggle2" },
 	{ "keys": ["ctrl+super+a"], "command": "open_in_app" },
 	{ "keys": ["ctrl+super+m"], "command": "open_in_ol" },
 	{ "keys": ["ctrl+super+g"], "command": "goto_today_single" },

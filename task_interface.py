@@ -1,6 +1,10 @@
 import sublime_plugin
 import sublime
 
+# 20171211 - read in states via settings file - also use settings to define which states are considered
+# to be active - so that only those states are displayed for "All Active"
+
+
 # 20171106 - added in capability to choose all (including done) and all-active (not done state).
 # See corresponding way to search for inclusion in the list of states in "show_instances.py"
 
@@ -10,13 +14,16 @@ import sublime
 class TaskInterfaceCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
+
+        settings = sublime.load_settings("Task.sublime-settings")
+        # List of task state keywords
+        keywords = settings.get('keywords')
+        # List of keywords that are considered to be active (including those waiting)
+        self.active = settings.get('active')
+
         self.a = []
         self.a.append("All-Active")
-        self.a.append("@task")
-        self.a.append("@next")
-        self.a.append("@working")
-        self.a.append("@waiting")
-        self.a.append("@done")
+        self.a.extend(keywords)
 
         # timeout fix at https://github.com/tosher/Mediawiker/blob/master/mediawiker.py
         sublime.set_timeout(lambda: self.view.window().show_quick_panel(self.a, self.on_done), 1)
@@ -24,10 +31,15 @@ class TaskInterfaceCommand(sublime_plugin.TextCommand):
     def on_done(self, index):
         if index == -1:
             return
-        print(self.a[index])
+
         if self.a[index] == "All-Active":
             self.a.remove("All-Active")
-            self.a.remove("@done")
+            # If we are selecting all active, parse out any inactive states
+            b = []
+            for x in range(0, (len(self.a) - 1)):
+                if self.active[x]: 
+                    b.append(self.a[x])
+            self.a = b
             self.view.run_command("show_instances", {"args": {'text': self.a}})
         else:
             self.view.run_command("show_instances", {"args": {'text': [self.a[index]]}})

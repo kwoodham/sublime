@@ -2,12 +2,12 @@
 	"working_dir":"$file_path",
 	"shell":true,
 
-	"cmd": ["C:\\Python34\\python.exe","C:\\msys64\\home\\kpwoodha\\.local\\bin\\pynproc.py", "--input", "${file}"],
+	"cmd": ["C:\\msys64\\usr\\bin\\python3.exe","C:\\msys64\\home\\kpwoodha\\.local\\bin\\pynproc.py", "--input", "${file}"],
 
 	"variants": [
 
         { "name": "render and preview",
-          "cmd": ["C:\\Python34\\python.exe","C:\\msys64\\home\\kpwoodha\\.local\\bin\\pynproc.py", "--input", "${file}", 
+          "cmd": ["C:\\msys64\\usr\\bin\\python3.exe","C:\\msys64\\home\\kpwoodha\\.local\\bin\\pynproc.py", "--input", "${file}", 
     	     "&", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe","${file/.md/.html/}"] 
         }
 	]

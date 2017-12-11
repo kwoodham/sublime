@@ -1,6 +1,8 @@
 import sublime_plugin
 
-# 13 Nov 2017 - update - add in check for empty line, include erasing of all 
+# 11 Dec 2017 - Old - Use task_toggle2
+
+# 13 Nov 2017 - add in check for empty line, include erasing of all 
 # markup as wrap-around state, and cleanup of logic.
 
 
