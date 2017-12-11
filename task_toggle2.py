@@ -1,5 +1,8 @@
 import sublime
 import sublime_plugin
+import shutil
+import tempfile
+import os
 
 # 08 Dec 2017 - use panel to select the keyword - don't have to follow serial state changes
 # this version also applies formating to the states per the settings.
@@ -26,7 +29,8 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
         # First case - "none": removing any task markings if there, otherwise return
         if self.keywords[index] == "none":
             if line_txt[:len(self.lead)] == self.lead:
-                txt = line_txt.split("`",3)[1].rstrip()
+                task_txt = line_txt.split("`",3)[1].rstrip()
+                txt = task_txt
             else:
                 return
 
@@ -42,6 +46,36 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
         # Apply the changes to the line
         self.view.run_command( "format_task", {"args": {'text': txt}})
 
+        # write the task back out to the todo file.  First we get a local copy
+        settings = sublime.load_settings("TodoInterface.sublime-settings")
+        todo_path = settings.get('todo_path', True)
+        f = open(todo_path, 'r')
+        s = f.read()
+        f.close()
+        l = s.splitlines()
+
+        # Then create a new temporary file to copy the tasks into
+        fb, abs_path = tempfile.mkstemp()
+        new_file = open(fb, 'w', encoding="utf-8")
+
+        # Copy the old tasks into the new, modifying the updated tasks with the 
+        # new state
+        for line in l:
+            b = line.split(" a:", 2)
+            if b[0] == task_txt:               
+                line = b[0].strip() + " a:1 s:" + self.keywords[index].lower()
+            new_file.write(line + "\n") 
+        new_file.close() # mkstemp() path is still available
+
+        # want to bail if we can't make a backup
+        try:
+            shutil.copy(todo_path, todo_path.replace("txt","bak"))
+        except:
+            print("Error creating backup\n")
+
+        # if the backup was successful, remove the old todo file, and move the new one to it
+        os.remove(todo_path)
+        shutil.move(abs_path,todo_path)
 
     def run(self, edit):
 
