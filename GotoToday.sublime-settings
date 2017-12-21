@@ -1,3 +1,4 @@
 {
-  "subproj": 1
+  "subproj": 1,
+  "metaproj": ["avsi", "faa", "larc","nra","study"]
 }

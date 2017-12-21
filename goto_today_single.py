@@ -5,6 +5,11 @@ import datetime
 import os
 
 # 2017-12-21
+# If there is a something like "/projects/larc/2016-fueleap", then I want
+# the journal to be in fueleap. Add in "metaproj" list in the settings to
+# account for these.
+
+# 2017-12-21
 # If there is a directory: /projects/subprojects/year/year.md and the 
 # subproj switch is set, the entry will go in the subproject's journal
 # instead of the top-level journal.  
@@ -29,6 +34,7 @@ class GotoTodaySingleCommand(sublime_plugin.TextCommand):
         # Get "subprojects" switch
         settings = sublime.load_settings("GotoToday.sublime-settings")
         subproj  = settings.get('subproj', 0)
+        metaproj = settings.get('metaproj', [])
 
         # Get the year as a string
         outStr = datetime.date.today().strftime("%Y")
@@ -38,13 +44,16 @@ class GotoTodaySingleCommand(sublime_plugin.TextCommand):
 
         # Check for existence of valid subproject journal file if the subproj 
         # switch is set, otherwise point to top-level journal
+        # Process the "metaproject" level if the path is identified as a 
+        # metaproject per the settings.
         if subproj:
             b = self.view.window().extract_variables()['file_path']
             b = os.path.relpath(b,a)
             b = b.split("\\")
             if b[0] == 'projects':
-                subproj_name = b[1]
-                subproj_path = a + "\\" + "projects" + "\\" + subproj_name + "\\"
+                subproj_path = a + "\\" + b[0] + "\\" + b[1] + "\\"
+                if b[1] in metaproj:
+                    subproj_path = subproj_path + b[2] + "\\"                  
                 subproj_path = subproj_path + outStr + "\\" + outStr + ".md"
                 if os.path.isfile(subproj_path):
                     a = subproj_path
