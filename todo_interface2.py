@@ -29,7 +29,7 @@ class TodoInterface2Command(sublime_plugin.TextCommand):
         # Find all unassigned tasks
         self.c = []
         for line in TodoInterface2Command.l:
-            l1 = line.find('assigned:1')
+            l1 = line.find(' a:1')
             if l1 == -1:
                 self.c.append(line)
         self.c.sort()
@@ -83,7 +83,7 @@ class TodoInterface2Command(sublime_plugin.TextCommand):
         # Copy the old file into the new, tagging the select task
         for line in l:
             if line == self.e[index]:
-                new_file.write(line + " assigned:1\n")
+                new_file.write(line + " a:1 s:none\n")
             else:
                 new_file.write(line + "\n")
         new_file.close() # mkstemp() path is still available

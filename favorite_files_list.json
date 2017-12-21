@@ -1,0 +1,42 @@
+{
+    "files": [
+        {
+            "alias": "top-level",
+            "file": "C:\\msys64\\home\\kpwoodha\\work-notes\\index.md"
+        },
+        {
+            "alias": "ia-annex",
+            "file": "C:\\msys64\\home\\kpwoodha\\work-notes\\projects\\faa\\2016-ia-annex\\index.md"
+        },
+        {
+            "alias": "oce-detail",
+            "file": "C:\\msys64\\home\\kpwoodha\\work-notes\\projects\\oce-detail\\index.md"
+        },
+        {
+            "alias": "purdue",
+            "file": "C:\\msys64\\home\\kpwoodha\\work-notes\\projects\\nra\\2014-purdue\\index.md"
+        },
+        {
+            "alias": "rockwell - phase 2",
+            "file": "C:\\msys64\\home\\kpwoodha\\work-notes\\projects\\nra\\2015-rockwell\\phase-2\\index.md"
+        },
+        {
+            "alias": "references",
+            "file": "C:\\msys64\\home\\kpwoodha\\work-notes\\references\\index.md"
+        },
+        {
+            "alias": "misc",
+            "file": "C:\\msys64\\home\\kpwoodha\\work-notes\\misc\\index.md"
+        },
+        {
+            "alias": "todo.txt",
+            "file": "C:\\msys64\\home\\kpwoodha\\todo\\todo.txt"
+        },
+        {
+            "alias": "fueleap",
+            "file": "C:\\msys64\\home\\kpwoodha\\work-notes\\projects\\larc\\2016-fueleap\\index.md"
+        }
+    ],
+    "groups": {},
+    "version": 2
+}
