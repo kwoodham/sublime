@@ -32,13 +32,14 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
         # if it looks like this has an anchor (because it has a "{"), parse the
         # line into task text and anchor.  If it has more than two parts to the
         # parse, then punt...
-        line_parts = line_txt.split("{")
-        if not len(line_parts) == 2:
-            print("Don't know how to parse this line\n")
-            return
-        else:  # line contains only an anchor at the end
-            line_txt = line_parts[0]
-            anch_txt = " {" + line_parts[1]  # rstrip used below; need a space
+        if "{" in line_txt:
+            line_parts = line_txt.split("{")
+            if not len(line_parts) == 2:
+                print("Don't know how to parse this line\n")
+                return
+            else:  # line contains only an anchor at the end
+                line_txt = line_parts[0]
+                anch_txt = " {" + line_parts[1]  # rstrip used below; need a space
 
         # Now work on just the task string:
         # First case - "none": removing any task markings if there, otherwise return
