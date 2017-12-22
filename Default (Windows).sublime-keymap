@@ -1,7 +1,6 @@
 [
 	{ "keys": ["ctrl+super+w"], "command": "toggle_setting", "args": {"setting": "word_wrap"}},
 	{ "keys": ["ctrl+super+z"], "command": "todo_interface2" },
-	{ "keys": ["ctrl+super+u"], "command": "unique_anchor" },
 	{ "keys": ["ctrl+super+y"], "command": "task_interface" },
 	{ "keys": ["ctrl+super+t"], "command": "task_toggle2" },
 	{ "keys": ["ctrl+super+a"], "command": "open_in_app" },
@@ -16,6 +15,7 @@
 	{ "keys": ["ctrl+super+h"], "command": "goto_index" },
 	{ "keys": ["ctrl+super+j"], "command": "toc_jump" },
 
+	{ "keys": ["ctrl+alt+u"], "command": "unique_anchor" },
 	{ "keys": ["ctrl+alt+d"], "command": "pop_date" },
 
 	{ "keys": ["tab"], "command": "smart_folding", "context": 
@@ -32,5 +32,9 @@
 	{ "keys": ["ctrl+super+i"], "command": "insert_snippet", 
 	    "args": {"name": "Packages/User/md_italics.sublime-snippet"},
 	    "context": [{"key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown"}]
-	}
+	},
+
+	{ "keys": ["ctrl+shift+a"], "command": "select_all" },
+	{ "keys": ["ctrl+a"], "command": "move_to", "args": {"to": "bol", "extend": false} },
+	{ "keys": ["ctrl+e"], "command": "move_to", "args": {"to": "eol", "extend": false} }
 ]
