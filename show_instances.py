@@ -62,19 +62,18 @@ def findStr(self, top, stringToFind, lead):
     n = int(0)
     for root, dirs, files in os.walk(top):
         for fileName in files:
-            if fileName.endswith(".md"): 
+            if fileName.endswith(".md"):
                 f = open(os.path.join(root, fileName), encoding='utf-8', errors='surrogateescape')
                 fn = 0  # Need to reference line number
-                for line in f: 
-                    fn = fn + 1                                                                                                                                                
-                    if ( line[0:len(lead)] == lead ) and ( line.split(' ')[1] in stringToFind ):
-                        # print(line)
+                for line in f:
+                    fn = fn + 1
+                    if (line[0:len(lead)] == lead) and (line.split(' ')[1] in stringToFind):
                         n = n + int(1)
                         p0 = os.path.relpath(root)
                         relPath = os.path.relpath(p0, p1)
                         relPath = relPath.replace('\\', '/')
                         relFileName = relPath + "/" + fileName
-                        line = line.replace(lead,"") # only show keyword and task text - not lead
+                        line = line.replace(lead, "")  # only show keyword and task text - not lead
                         i = [fn, fileName, relFileName, line.rstrip('\n')]
                         hitMatrix.append(i)
     # Return a sorted (most recent first) list

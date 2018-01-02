@@ -1,11 +1,11 @@
 import sublime_plugin
 import sublime
 
-# 20171211 - read in states via settings file - also use settings to define which states are considered
-# to be active - so that only those states are displayed for "All Active"
+# 20171211 - read in states via settings file - also use settings to define which states
+# are considered to be active - so that only those states are displayed for "All Active"
 
 
-# 20171106 - added in capability to choose all (including done) and all-active (not done state).
+# 20171106 - added in capability to choose all (including done) and all-active (not done).
 # See corresponding way to search for inclusion in the list of states in "show_instances.py"
 
 # 20171108 - corrected last line to pass a single element list instead of a text string if
@@ -33,11 +33,10 @@ class TaskInterfaceCommand(sublime_plugin.TextCommand):
             return
 
         if self.a[index] == "All-Active":
-            self.a.remove("All-Active")
-            # If we are selecting all active, parse out any inactive states
+            self.a.remove("All-Active")  # If selecting all active, parse out inactive tasks
             b = []
             for x in range(0, (len(self.a) - 1)):
-                if self.active[x]: 
+                if self.active[x]:
                     b.append(self.a[x])
             self.a = b
             self.view.run_command("show_instances", {"args": {'text': self.a}})
