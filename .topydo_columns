@@ -1,0 +1,29 @@
+[all]
+title = all
+filterexpr = -x
+groupexpr = 
+
+[unassigned]
+title = unassigned
+filterexpr = -a:1
+
+[pool]
+title = task pool
+filterexpr = s:task
+
+[next]
+title = next
+filterexpr = s:next
+
+[work]
+title = work
+filterexpr = s:work
+
+[wait]
+title = wait
+filterexpr = s:wait
+
+[done]
+title = done
+filterexpr = completed:<tomorrow
+show_all = 1

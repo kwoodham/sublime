@@ -24,6 +24,8 @@
 		]
 	},
 
+	{ "keys": ["f1"], "command": "join_lines" },
+
 	{ "keys": ["ctrl+super+b"], "command": "insert_snippet", 
 	    "args": {"name": "Packages/User/md_bold.sublime-snippet"},
 	    "context": [{"key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown"}]

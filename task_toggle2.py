@@ -3,6 +3,15 @@ import sublime_plugin
 import shutil
 import tempfile
 import os
+import time
+
+# 04 Jan 2018 if task is placed in "end_state" (i.e. "DONE"), the current
+# date is pre-pended in the todo.txt file, and the state is locked in ST.
+# If the task is placed in the "del_state" (i.e. "KILL"), the state is
+# locked and the task is deleted from the todo.txt file.
+
+# Note: disable auto-purge of todo.txt if you want the done tasks to be
+# listed in the kanban columns
 
 # 22 Dec 2017 if there is an anchor assigned to the task, do not delete
 # it when the stage changes
@@ -42,7 +51,22 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
                 anch_txt = " {" + line_parts[1]  # rstrip used below; need a space
 
         # Now work on just the task string:
-        # First case - "none": removing any task markings if there, otherwise return
+
+        # check to see that we aren't working with a completed task:
+        done_task_lead = self.lead + self.end_state  # "lead" has a built-in space
+        if line_txt[:len(done_task_lead)] == done_task_lead:
+            print("Cannot change state of a task marked " + self.end_state)
+            print("as it likely has a completed data recorded in the todo.txt task file.\n")
+            return
+
+        # check to see that we aren't working with a deleted task:
+        del_task_lead = self.lead + self.del_state  # "lead" has a built-in space
+        if line_txt[:len(del_task_lead)] == del_task_lead:
+            print("Cannot change state of a task marked " + self.del_state)
+            print("as it has likely been deleted from the todo.txt task file.\n")
+            return
+
+        # next case - "none": removing any task markings if there, otherwise return
         if self.keywords[index] == "none":
             if line_txt[:len(self.lead)] == self.lead:
                 task_txt = line_txt.split("`", 3)[1].rstrip()
@@ -50,13 +74,14 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
             else:
                 return
 
-        # second case - apply keyword and marking if it's a new task, or change if old
-        else:
+        else:  # otherwise apply keyword
             if line_txt[:len(self.lead)] == self.lead:
                 task_txt = line_txt.split("`", 3)[1].rstrip()
             else:
                 task_txt = line_txt
             txt = self.lead + self.keywords[index] + " " + self.formats[index][0] + "`"
+            if self.keywords[index] == self.end_state:
+                txt = txt + time.strftime("%Y-%m-%d") + " "
             txt = txt + task_txt + "`" + self.formats[index][1]
 
         # Add back in the anchor (anch_txt is empty if there isn't one)
@@ -83,6 +108,8 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
             b = line.split(" a:", 2)
             if b[0] == task_txt:
                 line = b[0].strip() + " a:1 s:" + self.keywords[index].lower()
+                if self.keywords[index] == self.end_state:
+                    line = "x " + time.strftime("%Y-%m-%d") + " " + line
             new_file.write(line + "\n")
         new_file.close()  # mkstemp() path is still available
 
@@ -102,6 +129,8 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
         settings = sublime.load_settings("Task.sublime-settings")
         self.lead = settings.get('lead')
         self.keywords = settings.get('keywords')
+        self.end_state = settings.get('end_state')
+        self.del_state = settings.get('del_state')
         self.keywords.extend(['none'])  # Add in option to clear task formatting
         self.formats = settings.get('formats')
 

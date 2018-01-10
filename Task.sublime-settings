@@ -6,6 +6,8 @@
     			 "WAIT", 
     			 "DONE", 
     			 "KILL"],
+    "end_state": "DONE",
+    "del_state": "KILL",
     "active":  [1,
                 1,
                 1,
