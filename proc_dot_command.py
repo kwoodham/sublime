@@ -19,7 +19,8 @@ from User.slugify import slugify
 
 # requires paths to python exec and proc_dot.py
 
-# 12 Jan 2018  - first revision
+# 12 Jan 2018 - first revision
+# 16 Jan 2018 - seems to blow up with "-" in graph name - check for this.
 
 
 class ProcDotCommand(sublime_plugin.TextCommand):
@@ -37,6 +38,12 @@ class ProcDotCommand(sublime_plugin.TextCommand):
         # Check that the right things are in the header line
         if sRaw[0].split(' ')[1] == "{":
             print("Need to name the graph")
+            return
+
+        # Check to see if graph name includes a "-" - seems to cause
+        # pydot graph generation to bomb
+        if (sRaw[0].split(' ')[1]).find("-") > -1:
+            print("Graph name contains a dash - will bomb-out in pydot.")
             return
 
         # Then create a new temporary file to copy the tasks into
