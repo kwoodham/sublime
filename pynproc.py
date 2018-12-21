@@ -40,6 +40,7 @@ def preProcessMarkups(input_text):
 
     return f1
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--notoc", help="No TOC (default)", action="store_true")
@@ -60,9 +61,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     PDOPTS = []
-    PDOPTS.append('--from=markdown+simple_tables+auto_identifiers')  # These might be default anyhow
-    PDOPTS.append('--smart')
+    PDOPTS.append('--from=markdown+auto_identifiers')  # These might be default anyhow
+    # PDOPTS.append('--smart')
     PDOPTS.append('--standalone')
+    PDOPTS.append('--columns=10000')  # https://github.com/jgm/pandoc/issues/2574
     PDOPTS.append('--include-in-header=' + os.path.expanduser('~') + '/css/markdown.css')
 
     if (args.bib):
@@ -96,7 +98,7 @@ if __name__ == '__main__':
     print('Creating ' + args.output + '...')
     out_html = pypandoc.convert(
         out_text,
-        to='html', format='md',
+        to='html', format='markdown+smart',
         outputfile=args.output,
         extra_args=PDOPTS)
 

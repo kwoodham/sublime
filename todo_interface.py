@@ -14,6 +14,7 @@ class TodoInterfaceCommand(sublime_plugin.TextCommand):
         f = open(todo_path, 'r')
         s = f.read()
         f.close()
+        
         TodoInterfaceCommand.l = s.splitlines()
 
         self.c = []

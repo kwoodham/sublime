@@ -22,6 +22,7 @@ class CleanUnicodeCommand(sublime_plugin.TextCommand):
         a[8230] = "..."
         a[8482] = "(TM)"
         for key, value in a.items():
+            # print("Searching for: " + chr(key) + "\n")
             locations = self.view.find_all(chr(key))
             for b in locations:
                 self.view.replace(edit, b, value)
