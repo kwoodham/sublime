@@ -3,6 +3,8 @@ import sublime
 import subprocess
 import re
 
+# 13 Apr 2019 - got going on my Windows laptop had to change bible to ESV2011
+
 # 10 Dec 2015 - if empty selection, then grab the whole line as a reference.  This means that 
 # I don't have to select a reference after I just typed it on a new line.  This also means that
 # the line should only contain a reference or a chain of references.
@@ -59,13 +61,17 @@ class DiathekeSession:
         P.append(['<q level="1" marker="&#8221;"/>', '"\\'])
         P.append(['<q level="2" marker="&#8216;"/>', "'"])
         P.append(['<q level="2" marker="&#8217;"/>', "'"])
+        P.append(['&#8220;', '"'])
+        P.append(['&#8221;', '"\\'])
+        P.append(['&#8216;', "'"])
+        P.append(['&#8217;', "'"])
         P.append(['&#8212;', '--'])
-        P.append(['(ESV)', ''])
+        P.append(['(ESV2011)', ''])
 
         re_str1 = '\s[es]ID\=\"[wx0-9.]+\"'   # Takes care of the eID and sID strings
-        re_str2 = '\<[a-zA-Z0-9="/ -]+\>'     # Misc markups that I don't process (just remove)
+        re_str2 = '\<[a-zA-Z0-9=:"/ -]+\>'     # Misc markups that I don't process (just remove)
 
-        argd = "-b ESV -e HTML -k "
+        argd = "-b ESV2011 -e HTML -k "
         cmds = "diatheke " + argd + refTxt
 
         text = subprocess.Popen(cmds, shell=True, stdout=subprocess.PIPE).stdout.read()
@@ -80,7 +86,7 @@ class DiathekeSession:
                 line = line.replace(instance, '')
             for i in range(0, len(P)):
                 line = line.replace(P[i][0], P[i][1])
-            line = re.sub(re_str2, ' ', line)
+            line = re.sub(re_str2, '', line)
             f1.append(line)
 
         # Only want verse numbers if book and chapter haven't change
