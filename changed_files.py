@@ -7,7 +7,7 @@ try:
 except IOError:
     ldb = []
 db = dict(ldb)
-fdump = open('db.files', 'w', newline='\n')
+fdump = open('db.files', 'w', newline="\n")
 for root, dirs, files in os.walk("./"):
     for file in files:
         if file.endswith(".md"):

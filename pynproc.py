@@ -1,8 +1,18 @@
 #!/bin/python
 
+# 10 April 2019
+# - added check to see if html output file existed and delete it if so. 
+# (Seems like thee were instances where some output files had some updates appended to
+# existing files.)
+# - Update pyndoc.convert() to pyndoc.convert_text() per deprecated function warnings.
+# It looks like this expects to return text, so had to add in explicit write of returned
+# text to file
+# - Looks like pandoc no longer includes offending <style> stuff that I had to cut out
+# before - can not dump pandoc converted text directly to output file
+
 # 17 Mar 2016 - Python version of my "panproc" bash script - uses the python argument
-# parser to be a bit more flexible. This file preprocess the Markdown for critic marks,
-# stripping out the MarkdownTOC (toc swtich can put in an html version), and adds anchors
+# parser to be a bit more flexible. This file preprocesses the Markdown for critic marks,
+# stripping out the MarkdownTOC (toc switch can put in an html version), and adds anchors
 # for internal links with headings that start with digits.
 
 import pypandoc
@@ -40,6 +50,7 @@ def preProcessMarkups(input_text):
 
     return f1
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--notoc", help="No TOC (default)", action="store_true")
@@ -54,15 +65,17 @@ if __name__ == '__main__':
         metavar='in-file', type=argparse.FileType('rt', encoding='utf-8'),
         required=True)
     parser.add_argument(
-        "-o", "--output", help="output file (default is input.html)",
+        "-o", "--output", help="output file (default is 'input'.html)",
         type=str,
         required=False)
     args = parser.parse_args()
 
     PDOPTS = []
-    PDOPTS.append('--from=markdown+simple_tables+auto_identifiers')  # These might be default anyhow
-    PDOPTS.append('--smart')
+    PDOPTS.append('-V') # https://github.com/bebraw/pypandoc
+    PDOPTS.append('--from=markdown+auto_identifiers')  # These might be default anyhow
+    # PDOPTS.append('--smart')
     PDOPTS.append('--standalone')
+    PDOPTS.append('--columns=10000')  # https://github.com/jgm/pandoc/issues/2574
     PDOPTS.append('--include-in-header=' + os.path.expanduser('~') + '/css/markdown.css')
 
     if (args.bib):
@@ -79,6 +92,9 @@ if __name__ == '__main__':
     if (not args.output):
         fname, fext = os.path.splitext(args.input.name)
         args.output = fname + '.html'
+        exists = os.path.isfile(args.output) # 4/10/2019 - seems some html was getting appended
+        if exists:
+            os.remove(args.output)
 
     print('Processing ' + args.input.name + '...')
     in_file = args.input
@@ -94,23 +110,13 @@ if __name__ == '__main__':
     out_text = '\n'.join(out_text)
 
     print('Creating ' + args.output + '...')
-    out_html = pypandoc.convert(
+    out_html = pypandoc.convert_text(
         out_text,
-        to='html', format='md',
-        outputfile=args.output,
+        to='html', format='markdown+smart',
         extra_args=PDOPTS)
 
-    # Take out offending style line put in by pandoc - written out to
-    # a file, so we have to read it back in.
-    # UTF-8 encoding require to support --smart switch on pandoc.
-    # Probably is easier to read/write with one open, but I do an
-    # intermediate close/open
-
-    f = open(args.output, 'r', encoding='utf-8')
-    a = f.read()
-    f.close()
-    loc_beg = a.find('  <style type="text/css">')
-    loc_end = a.find('</style>', loc_beg) + int(9)  # length of the close tag + 1 space
+    # It appears that pandoc no longer puts in `<style type="text/css">' line,
+    # so just print out to file
     f = open(args.output, 'w', encoding='utf-8')
-    f.write(a[:loc_beg] + a[loc_end:])
+    f.write(out_html)
     f.close()

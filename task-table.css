@@ -1,0 +1,56 @@
+<style>
+  body{
+      background-color: blue;
+    }
+	table {
+      background-color: #2F4F4F;
+      font-family:Ubuntu Mono;
+	    margin-left: 0;
+      margin-right: auto;
+      margin-bottom: 3px;
+      border-spacing: 3;
+      border-bottom: none;
+      border-top: none;
+  }
+	table th {
+      color: white;
+      padding: 3px 0px;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid black;
+  }
+	table td {
+  	  vertical-align: top;
+      padding: 3px 0px;
+      border-top: 1px solid black;
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+  }
+	table td.item {
+      padding: 3px 0px;
+      border-top: 0;
+      border-left: 0;
+      border-bottom: 0;
+      border-right: 0;
+  } 
+	table.task {
+	    border-collapse: collapse;
+	    border: 1px solid gray;
+	    margin-left: 3px;
+      margin-right: auto;
+      margin-bottom: auto;
+  }
+  table.task td {
+      background-color: #F5F5F5;
+      padding: 1px 5px;
+      border-top: 1px;
+      border-left: 1px;
+      border-bottom: 1px;
+      border-right: 1px;
+  }
+  table.task td.proj {
+      color: green;
+  }
+</style>

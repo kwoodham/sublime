@@ -5,6 +5,14 @@ import tempfile
 import os
 import time
 
+# 07 Mar 2019 use a project todo list if it exists; otherwise use the 
+# default from the settings file.
+
+# 04 Feb 2019 if task is killed, mark it as completed and apply the "kill"
+# date to the task. Can tell differenced between completed and killed
+# tasks by the s: flag in the archive - thought it was valuable to record
+# the kill date and have the task marked as completed for archival purposes
+
 # 04 Jan 2018 if task is placed in "end_state" (i.e. "DONE"), the current
 # date is pre-pended in the todo.txt file, and the state is locked in ST.
 # If the task is placed in the "del_state" (i.e. "KILL"), the state is
@@ -91,8 +99,16 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
         self.view.run_command("format_task", {"args": {'text': txt}})
 
         # write the task back out to the todo file.  First we get a local copy
-        settings = sublime.load_settings("TodoInterface.sublime-settings")
-        todo_path = settings.get('todo_path', True)
+        # of either the project todo list (if it exists) or the default todo list
+        # from the settings file
+        a = self.view.window().project_data().get('folders')
+        b = a[0].get('path') + "\\todo\\"
+        if os.path.isdir(b):
+            todo_path = b + "todo.txt"
+        else:
+            settings = sublime.load_settings("TodoInterface.sublime-settings")
+            todo_path = settings.get('todo_path', True)
+
         f = open(todo_path, 'r')
         s = f.read()
         f.close()
@@ -108,7 +124,7 @@ class TaskToggle2Command(sublime_plugin.TextCommand):
             b = line.split(" a:", 2)
             if b[0] == task_txt:
                 line = b[0].strip() + " a:1 s:" + self.keywords[index].lower()
-                if self.keywords[index] == self.end_state:
+                if ( self.keywords[index] == self.end_state )  or ( self.keywords[index] == self.del_state ):
                     line = "x " + time.strftime("%Y-%m-%d") + " " + line
             new_file.write(line + "\n")
         new_file.close()  # mkstemp() path is still available

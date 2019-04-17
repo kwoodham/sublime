@@ -1,0 +1,10 @@
+<tr>
+    <td class="item">
+        <table class="task">
+            <tr><td><b>$task</b></td></tr>
+            <tr><td class="proj">$project</td></tr>
+            <tr><td><small>$state</small></td></tr>
+            <tr><td><small>$startDate</small></td></tr>
+        </table>
+    </td>
+</tr>

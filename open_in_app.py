@@ -4,6 +4,11 @@ import subprocess
 import os
 import platform
 
+# Update 21 Dec 2018 - Forced to use "OneDrive - NASA" as OneDrive address, and
+# could not get subprocess call to open files with space in path. Use "dir /X" in
+# CMD prompt to get "old" DOS directory name: ONEDRI~1 - substitute it in if it's
+# in the path - not elegant, but works.
+
 
 class OpenInAppCommand(sublime_plugin.TextCommand):
 
@@ -39,6 +44,7 @@ class OpenInAppCommand(sublime_plugin.TextCommand):
         # Launch the application with arguments and file
         if platform.system() == 'Windows':
             abs_path = abs_path.replace("/", "\\")
+            abs_path = abs_path.replace("OneDrive - NASA","ONEDRI~1")
         try:
             subprocess.Popen([app_list[index], arg_list[index], abs_path])
         except:

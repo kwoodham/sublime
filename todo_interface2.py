@@ -4,6 +4,13 @@ import shutil
 import tempfile
 import os
 
+# 16 Apr 2019
+# If the first character in the task is "x" then bypass: sometimes I close out tasks
+# outside of sublime and I don't want them showing up in the task selection list.
+
+# 07 Mar 2019
+# Use a project todo list if it exists, (by looking for a todo directory in the project root)
+# Otherwise use the default defined in "TodoInterfaces.sublime-settings"
 
 # 15 Nov 2017
 # This version looks only for lines that do not contain assigned:1 tags in the todo file
@@ -18,8 +25,16 @@ class TodoInterface2Command(sublime_plugin.TextCommand):
 
     def run(self, edit):
 
-        settings = sublime.load_settings("TodoInterface.sublime-settings")
-        TodoInterface2Command.todo_path = settings.get('todo_path', True)
+        # If there is a todo directory in the project root - use it, otherwise use the
+        # "system" - or global todo file defined in the settings file
+        a = self.view.window().project_data().get('folders')
+        b = a[0].get('path') + "\\todo\\"
+        if os.path.isdir(b):
+            TodoInterface2Command.todo_path = b + "todo.txt"
+        else:
+            settings = sublime.load_settings("TodoInterface.sublime-settings")
+            TodoInterface2Command.todo_path = settings.get('todo_path', True)
+
         f = open(TodoInterface2Command.todo_path, 'r')
         s = f.read()
         f.close()
@@ -30,7 +45,7 @@ class TodoInterface2Command(sublime_plugin.TextCommand):
         self.c = []
         for line in TodoInterface2Command.l:
             l1 = line.find(' a:1')
-            if l1 == -1:
+            if (l1 == -1) and (line[0] != 'x'): # 16 Apr 2019
                 self.c.append(line)
         self.c.sort()
         TodoInterface2Command.l = self.c
