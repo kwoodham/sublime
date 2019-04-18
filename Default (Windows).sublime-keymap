@@ -17,6 +17,7 @@
 
 	{ "keys": ["ctrl+alt+u"], "command": "unique_anchor" },
 	{ "keys": ["ctrl+alt+d"], "command": "pop_date" },
+	{ "keys": ["ctrl+alt+l"], "command": "paste_file_link" },
 
 	{ "keys": ["tab"], "command": "smart_folding", "context": 
 		[
@@ -28,15 +29,25 @@
 
 	{ "keys": ["ctrl+super+b"], "command": "insert_snippet", 
 	    "args": {"name": "Packages/User/md_bold.sublime-snippet"},
-	    "context": [{"key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown"}]
+	    "context": [{"key": "selector", "operator": "equal", "operand": "text.html.markdown"}]
 	},
 
 	{ "keys": ["ctrl+super+i"], "command": "insert_snippet", 
 	    "args": {"name": "Packages/User/md_italics.sublime-snippet"},
-	    "context": [{"key": "selector", "operator": "equal", "operand": "meta.paragraph.markdown"}]
+	    "context": [{"key": "selector", "operator": "equal", "operand": "text.html.markdown"}]
 	},
+
+    { "keys": ["ctrl+alt+z"], "command": "run_macro_file", 
+	    "args": {"file": "res://Packages/User/local-link.sublime-macro"}
+	},
+
 
 	{ "keys": ["ctrl+shift+a"], "command": "select_all" },
 	{ "keys": ["ctrl+a"], "command": "move_to", "args": {"to": "bol", "extend": false} },
-	{ "keys": ["ctrl+e"], "command": "move_to", "args": {"to": "eol", "extend": false} }
+	{ "keys": ["ctrl+e"], "command": "move_to", "args": {"to": "eol", "extend": false} },
+
+	{"keys": ["ctrl+shift+,"], "command": "add_date" },
+    {"keys": ["ctrl+shift+."], "command": "add_time" },
+
+    { "keys": ["ctrl+m"], "command": "mark_critic" }
 ]
