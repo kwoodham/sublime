@@ -1,9 +1,10 @@
 <style>
   body{
-      background-color: blue;
+      background-color: #223B56;
     }
 	table {
-      background-color: #2F4F4F;
+      border-collapse: collapse;
+      background-color: #223B56;
       font-family:Ubuntu Mono;
 	    margin-left: 0;
       margin-right: auto;
@@ -13,23 +14,25 @@
       border-top: none;
   }
 	table th {
+      background-color: #2F4F4F;
       color: white;
-      padding: 3px 0px;
-      border-top: none;
+      padding: 10px 5px;
+      border-top: 2px solid black;
       border-left: none;
       border-right: none;
-      border-bottom: 1px solid black;
+      border-bottom: 2px solid black;
   }
 	table td {
   	  vertical-align: top;
-      padding: 3px 0px;
-      border-top: 1px solid black;
-      border-left: 1px solid black;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
+      padding: 3px 10px;
+      border-top: 1px solid lightgray;
+      border-left: 1px solid lightgray;
+      border-bottom: 1px solid lightgray;
+      border-right: 1px solid lightgray;
   }
 	table td.item {
-      padding: 3px 0px;
+      background-color: #708090;
+      padding: 5px 5px;
       border-top: 0;
       border-left: 0;
       border-bottom: 0;
@@ -37,10 +40,11 @@
   } 
 	table.task {
 	    border-collapse: collapse;
-	    border: 1px solid gray;
+	    border: 0;
 	    margin-left: 3px;
-      margin-right: auto;
-      margin-bottom: auto;
+      margin-right: 3px;
+      margin-top: 10;      
+      margin-bottom: 10;
   }
   table.task td {
       background-color: #F5F5F5;
@@ -52,5 +56,8 @@
   }
   table.task td.proj {
       color: green;
+  }
+  table.task td.days {
+      color: red;
   }
 </style>
