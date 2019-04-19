@@ -1,6 +1,10 @@
 body {
   background-color: #2F4F4F;
 }
+h1 {
+  color:#DCDCDC; 
+  text-align:center;
+}
 table {
   border-collapse: collapse;
   background-color: #223B56;

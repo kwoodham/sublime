@@ -1,0 +1,64 @@
+body {
+  background-color: #002b36;
+  font-family: DejaVu Sans Mono;
+  margin: 0 auto;
+  padding: 1em;
+}
+a:link {
+  color: #268bd2; 
+  background-color: transparent; 
+  text-decoration: none;
+}
+a:visited {
+  color: #268bd2; 
+  background-color: transparent; 
+  text-decoration: none;
+}
+a:hover {
+  color: #eee8d5; 
+  background-color: transparent; 
+  text-decoration: none;
+}
+table {
+  border-collapse: collapse;
+  background-color: transparent;
+  margin-left: 0;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+table th {
+  color: #2aa198;
+  font-size: 1.25em;
+  padding: 10px 5px;
+  border: 1px solid #eee8d5;
+}
+table td {
+	vertical-align: top;
+  padding: 3px 10px;
+  border: 0;
+}
+table td.item {
+  background-color: #586e75;
+  padding: 5px 5px;
+  border: 0;
+} 
+table.task {
+  margin-left: 3px;
+  margin-right: auto;
+  margin-top: 10;    
+  margin-bottom: 10;
+  border: 0;
+}
+table.task td {
+  background-color:  #073642;
+  color: #268bd2;
+  padding: 1px 5px;
+  border: 0;
+}
+table.task td.proj {
+  color: #859900;
+}
+table.task td.days {
+  color: #b58900;
+}
