@@ -103,6 +103,7 @@ new_file.write('<title>Task Kanban</title>\n')
 new_file.write('<link rel="stylesheet" href="./task-table-solarized-dark.css">\n')
 new_file.write('</head>\n')
 new_file.write('<body>\n')
+new_file.write('<h1>D209 Task Board</h1>\n')
 new_file.write('<table>\n')
 new_file.write('<tr>\n')
 

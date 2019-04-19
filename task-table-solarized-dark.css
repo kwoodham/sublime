@@ -1,20 +1,35 @@
 body {
   background-color: #002b36;
-  font-family: Ubuntu Mono;
+  font-family: DejaVu Sans Mono;
   margin: 0 auto;
   padding: 1em;
 }
+a:link {
+  color: #268bd2; 
+  background-color: transparent; 
+  text-decoration: none;
+}
+a:visited {
+  color: #268bd2; 
+  background-color: transparent; 
+  text-decoration: none;
+}
+a:hover {
+  color: #eee8d5; 
+  background-color: transparent; 
+  text-decoration: none;
+}
 table {
   border-collapse: collapse;
-  background-color: #002b36;
+  background-color: transparent;
   margin-left: 0;
   margin-right: auto;
   margin-top: 5px;
   margin-bottom: 5px;
-  border: o;
 }
 table th {
   color: #2aa198;
+  font-size: 1.25em;
   padding: 10px 5px;
   border: 1px solid #eee8d5;
 }
