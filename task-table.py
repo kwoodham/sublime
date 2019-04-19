@@ -3,6 +3,10 @@ import re
 from string import Template
 import tempfile
 import shutil
+import datetime
+
+# 18 Apr 2019
+# Added in "staleness" display for aging tasks
 
 # 17 Apr 2019
 # Kurt Woodham
@@ -78,8 +82,18 @@ for line in tasks:
     elif state=='':
         state = 'unassigned'
 
+    # Generate "staleness" or days it took to complete
+    date1 = dateo.split('-')
+    date1 = datetime.date(int(date1[0]),int(date1[1]),int(date1[2]))
+    if state=='done':
+        date2 = datec.split('-')
+        date2 = datetime.date(int(date2[0]),int(date2[1]),int(date2[2]))
+    else:
+        date2 = datetime.date.today()  
+    days = '(' + str( (date2-date1).days ) + ')'
+
     taskArray.append({'task': task, 'project': proj, 'state': state,
-        'startDate': dateo, 'endDate': datec})
+        'startDate': dateo, 'endDate': datec, 'days': days})
 
 ## Set up the HTML preamble
 new_file.write('<!DOCTYPE html>\n')

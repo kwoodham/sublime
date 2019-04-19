@@ -1,11 +1,13 @@
 <tr>
     <td class="item">
         <table class="task">
-            <tr><td><s><i>$task</i></s></td></tr>
-            <tr><td class="proj">$project</td></tr>
-            <tr><td><small>$state</small></td></tr>
-            <tr><td><small>$startDate</small></td></tr>
-            <tr><td><small>$endDate</small></td></tr>
+            <tr><td colspan="2"><s><i>$task</i></s></td></tr>
+            <tr><td colspan="2" class="proj">$project</td></tr>
+            <tr><td colspan="2"><small>$state</small></td></tr>
+            <tr><td colspan="2"><small>$startDate</small></td></tr>
+            <tr><td><small>$endDate</small></td>
+                <td class="days"><small>$days</small></td>
+            </tr>
         </table>
     </td>
 </tr>
