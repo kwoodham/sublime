@@ -98,8 +98,10 @@ for line in tasks:
 ## Set up the HTML preamble
 new_file.write('<!DOCTYPE html>\n')
 new_file.write('<html>\n')
+new_file.write('<head>\n')
 new_file.write('<title>Task Kanban</title>\n')
-new_file.write('<link rel="stylesheet" href="./task-table.css">\n')
+new_file.write('<link rel="stylesheet" href="./task-table-solarized-dark.css">\n')
+new_file.write('</head>\n')
 new_file.write('<body>\n')
 new_file.write('<table>\n')
 new_file.write('<tr>\n')
