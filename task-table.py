@@ -4,6 +4,10 @@ from string import Template
 import tempfile
 import shutil
 import datetime
+import json
+
+# 22 Apr 2019
+# Load in specific settings through JSON
 
 # 18 Apr 2019
 # Added in "staleness" display for aging tasks
@@ -14,10 +18,17 @@ import datetime
 # Needs the .css file and the two template files in the current
 # directory.
 
-# Hard-coded features - assume that the states actually match what's
-# being used. Output will be the .txt file as a .html
-filename = "./todo.txt"
-stateArray = ['unassigned', 'task', 'next', 'work', 'wait', 'done']
+with open('task-table.json') as config_file:
+    data = json.load(config_file)
+
+
+filename = data['filename']
+stateArray = data['stateArray']
+closedState = data['closedState']
+taskTableOpen = data['taskTableOpen']
+taskTableClosed = data['taskTableClosed']
+pageTitle = data['pageTitle']
+styleSheet = data['styleSheet']
 
 # Width of each column as a percent:
 colWidth = str(int(100/len(stateArray)))
@@ -28,11 +39,11 @@ s = f.read()
 f.close()
 
 # Read in the template
-f = open( 'task-table-open-template.txt' )
+f = open( taskTableOpen )
 srcOpen = Template( f.read() )
 f.close()
 
-f = open( 'task-table-closed-template.txt' )
+f = open( taskTableClosed)
 srcClosed = Template( f.read() )
 f.close()
 
@@ -55,10 +66,10 @@ for line in tasks:
 
     # First handle completed tasks - some of which
     # may have been worked outside of Sublime, so
-    # they won't have a "done" state appended.
+    # they won't have a closed state appended.
     # Pull off the leading "x" and completion date
     if line[0:2]=='x ':
-        state = 'done'
+        state = closedState
         line = line[2:]
         datec = datePattern.findall(line)[0]
         line = line[(len(datec)+1):]
@@ -75,7 +86,7 @@ for line in tasks:
 
     # If processed in Sublime it has an "s:" tag and we
     # can pull the state out of the tags. Otherwise
-    # it was "done" outside of Sublime (as processed
+    # it was close outside of Sublime (as processed
     # above) or it is unassigned.
     if tags.find('s:')!=(-1):
         state = tags[(tags.find("s:")+2):]
@@ -85,7 +96,7 @@ for line in tasks:
     # Generate "staleness" or days it took to complete
     date1 = dateo.split('-')
     date1 = datetime.date(int(date1[0]),int(date1[1]),int(date1[2]))
-    if state=='done':
+    if state== closedState:
         date2 = datec.split('-')
         date2 = datetime.date(int(date2[0]),int(date2[1]),int(date2[2]))
     else:
@@ -99,11 +110,11 @@ for line in tasks:
 new_file.write('<!DOCTYPE html>\n')
 new_file.write('<html>\n')
 new_file.write('<head>\n')
-new_file.write('<title>Task Kanban</title>\n')
-new_file.write('<link rel="stylesheet" href="./task-table-solarized-dark.css">\n')
+new_file.write('<title>' + pageTitle + '</title>\n')
+new_file.write('<link rel="stylesheet" href="' + styleSheet + '">\n')
 new_file.write('</head>\n')
 new_file.write('<body>\n')
-new_file.write('<h1>D209 Task Board</h1>\n')
+new_file.write('<h1>' + pageTitle + '</h1>\n')
 new_file.write('<table>\n')
 new_file.write('<tr>\n')
 
@@ -120,7 +131,7 @@ for state in stateArray:
     for i in range(len(taskArray)):
     
         if taskArray[i]['state']==state:
-            if state=='done':
+            if state== closedState:
                 result = srcClosed.substitute(taskArray[i])
             else:
                 result = srcOpen.substitute(taskArray[i])
