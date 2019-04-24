@@ -6,6 +6,10 @@ import shutil
 import datetime
 import json
 
+# 24 Apr 2019
+# Firefox doesn't like "c:\Users\..." path for stylesheet
+# change to relative path
+
 # 22 Apr 2019
 # Load in specific settings through JSON
 
@@ -29,6 +33,12 @@ taskTableOpen = data['taskTableOpen']
 taskTableClosed = data['taskTableClosed']
 pageTitle = data['pageTitle']
 styleSheet = data['styleSheet']
+
+# 24 Apr 2019 - change stylesheet to relative path
+styleSheet = styleSheet.replace("\\", "/")
+styleSheet = styleSheet.replace("C:","/c")
+styleSheet = os.path.relpath(styleSheet,os.getcwd())
+
 
 # Width of each column as a percent:
 colWidth = str(int(100/len(stateArray)))
