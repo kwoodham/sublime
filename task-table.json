@@ -1,5 +1,5 @@
 {
-	"pageTitle": "D320 Task Board",
+	"pageTitle": "GPX2 Task Board",
 	"filename": "./todo.txt",
 	"stateArray": [
 		"unassigned", 
@@ -9,7 +9,7 @@
 		"wait", 
 		"done" ],
 	"closedState": "done",
-	"taskTableOpen": "C:\\Users\\kpwoodha\\.local\\task-table-open-template.txt",
-	"taskTableClosed": "C:\\Users\\kpwoodha\\.local\\task-table-closed-template.txt",
-	"styleSheet": "C:\\Users\\kpwoodha\\.local\\task-table-solarized-dark.css"
+	"taskTableOpen": "/c/Users/kpwoodha/.local/task-table-open-template.txt",
+	"taskTableClosed": "/c/Users/kpwoodha/.local/task-table-closed-template.txt",
+	"styleSheet": "/c/Users/kpwoodha/.local/task-table-solarized-dark.css"
 }
