@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # 4/25/2019
     # Add title to the page by replacing the first header with metadata character
     # this is used as title for browser tab and for internal title
-    in_text[0].replace('#', '%')
+    in_text[0] = in_text[0].replace("#", "%")
 
     out_text = preProcessMarkups(in_text)
     if (args.strip):
