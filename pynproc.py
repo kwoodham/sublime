@@ -1,14 +1,17 @@
 #!/bin/python
 
+# 4/25/2019
+# Use top heading to name page in browser
+
 # 10 April 2019
 # - added check to see if html output file existed and delete it if so. 
-# (Seems like thee were instances where some output files had some updates appended to
+# (Seems like there were instances where some output files had some updates appended to
 # existing files.)
 # - Update pyndoc.convert() to pyndoc.convert_text() per deprecated function warnings.
 # It looks like this expects to return text, so had to add in explicit write of returned
 # text to file
 # - Looks like pandoc no longer includes offending <style> stuff that I had to cut out
-# before - can not dump pandoc converted text directly to output file
+# before - can now dump pandoc converted text directly to output file
 
 # 17 Mar 2016 - Python version of my "panproc" bash script - uses the python argument
 # parser to be a bit more flexible. This file preprocesses the Markdown for critic marks,
@@ -70,10 +73,7 @@ if __name__ == '__main__':
         required=False)
     args = parser.parse_args()
 
-    PDOPTS = []
-    PDOPTS.append('-V') # https://github.com/bebraw/pypandoc
-    PDOPTS.append('--from=markdown+auto_identifiers')  # These might be default anyhow
-    # PDOPTS.append('--smart')
+    PDOPTS = [] # https://github.com/bebraw/pypandoc
     PDOPTS.append('--standalone')
     PDOPTS.append('--columns=10000')  # https://github.com/jgm/pandoc/issues/2574
     PDOPTS.append('--include-in-header=' + os.path.expanduser('~') + '/css/markdown.css')
@@ -102,6 +102,11 @@ if __name__ == '__main__':
     in_text = in_text.split('\n')
     in_file.close()
 
+    # 4/25/2019
+    # Add title to the page by replacing the first header with metadata character
+    # this is used as title for browser tab and for internal title
+    in_text[0].replace('#', '%')
+
     out_text = preProcessMarkups(in_text)
     if (args.strip):
         out_text = stripToc(out_text)
@@ -112,8 +117,7 @@ if __name__ == '__main__':
     print('Creating ' + args.output + '...')
     out_html = pypandoc.convert_text(
         out_text,
-        to='html', format='markdown+smart',
-        extra_args=PDOPTS)
+        to='html5', format='md', extra_args=PDOPTS)
 
     # It appears that pandoc no longer puts in `<style type="text/css">' line,
     # so just print out to file
