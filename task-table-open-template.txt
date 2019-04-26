@@ -2,7 +2,9 @@
     <td class="item">
         <table class="task">
             <tr><td colspan="2"><b>$task</b></td></tr>
-            <tr><td colspan="2" class="proj">$project</td></tr>
+            <tr><td class="proj">$project</td>
+                <td class="proj">$context</td>
+            </tr
             <tr><td colspan="2"><small>$state</small></td></tr>
             <tr><td><small>$startDate</small></td>
                 <td class="days"><small>$days</small></td>

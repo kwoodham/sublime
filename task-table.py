@@ -6,6 +6,11 @@ import shutil
 import datetime
 import json
 
+# 26 Apr 2019
+# Add in context for lines that have it - wanted for "summary" board that 
+# puts meta-project (GPX2, D209) in as context.
+# Process tasks that don't have a project identifier
+
 # 24 Apr 2019
 # Firefox doesn't like full path for stylesheet - so change to relative path.
 # Also changed path styles in JSON to "/c/Users/..." style (what python likes)
@@ -56,6 +61,8 @@ f.close()
 # Some patterns used in searches
 datePattern = re.compile("[0-9-]+")
 projPattern = re.compile(" \+[a-zA-Z0-9]+")
+statePattern = re.compile(" s\:[a-zA-Z0-9]+")
+contextPattern = re.compile(" \@[a-zA-Z0-9]+")
 
 ## tempfile for creating output
 f, abs_path = tempfile.mkstemp()
@@ -85,19 +92,32 @@ for line in tasks:
     dateo = datePattern.findall(line)[0]
     line = line[(len(dateo)+1):]
 
-    # This will barf if there is no project assigned
-    # No error checking here.
-    proj = projPattern.findall(line)[0].lstrip()
-    [task, tags] = projPattern.split(line)
+    # 26 Apr 2019 if there is a project it will provide
+    # the separation between the task text and any tags
+    # If there isn't a project, treat the whole line as 
+    # the task as well as the source for any tags
+    if line.find(' +') != (-1):
+        proj = projPattern.findall(line)[0].lstrip()
+        [task, tags] = projPattern.split(line)
+    else:
+        proj = ''
+        task = line
+        tags = line
 
     # If processed in Sublime it has an "s:" tag and we
     # can pull the state out of the tags. Otherwise
-    # it was close outside of Sublime (as processed
+    # it was closed outside of Sublime (as processed
     # above) or it is unassigned.
-    if tags.find('s:')!=(-1):
-        state = tags[(tags.find("s:")+2):]
+    if tags.find(' s:')!=(-1):
+        state = statePattern.findall(tags)[0].lstrip(' s:')
     elif state=='':
         state = 'unassigned'
+
+    # 26 Apr 2019 Extract context if it's present
+    if tags.find(' @')!=(-1):
+        context = contextPattern.findall(tags)[0].lstrip()
+    else:
+        context = ''
 
     # Generate "staleness" or days it took to complete
     date1 = dateo.split('-')
@@ -109,8 +129,8 @@ for line in tasks:
         date2 = datetime.date.today()  
     days = '(' + str( (date2-date1).days ) + ')'
 
-    taskArray.append({'task': task, 'project': proj, 'state': state,
-        'startDate': dateo, 'endDate': datec, 'days': days})
+    taskArray.append({'task': task, 'project': proj, 'context': context, 
+        'state': state, 'startDate': dateo, 'endDate': datec, 'days': days})
 
 ## Set up the HTML preamble
 new_file.write('<!DOCTYPE html>\n')
