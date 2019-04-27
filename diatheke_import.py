@@ -3,6 +3,10 @@ import sublime
 import subprocess
 import re
 
+# 27 Apr 2019 - split multiple references by comma or semicolon
+# 27 Apr 2019 - Reserve last book name to use if next ref is just chapter and verse
+# 27 Apr 2019 - Found the "-f plain" switch - which eliminates all the markup
+
 # 13 Apr 2019 - got going on my Windows laptop had to change bible to ESV2011
 
 # 10 Dec 2015 - if empty selection, then grab the whole line as a reference.  This means that 
@@ -21,21 +25,23 @@ class DiathekeImportCommand(sublime_plugin.TextCommand):
         end = max(refLoc.a, refLoc.b)
         end = end + self.view.insert(edit, end, "\n\n")
 
-        refTxt = self.view.substr(refLoc)
-        refTxt = refTxt.split(", ")
+        refTxt = re.split("[,;] ", self.view.substr(refLoc)) # space is important
         for ref in refTxt:
-
+ 
+            # 27 Apr 2019 - handle repeat references from the same book: Gen 1:15, 3:14  
+            if re.match("[0-9-]+\:[0-9-]+", ref) == None: # Pass is "Gen 1:15"
+                [oldBook, NULL] = ref.rsplit(' ', 1)
+            else:
+                ref = oldBook + ' ' + ref
             # Get the text for the reference (remove the last blank line)
             bible = DiathekeSession()
-            pssge = bible.doPassageQuery(ref)
-            while pssge[-1] == '':  # pythony way to reference last element of the list
-                pssge = pssge[:len(pssge)-1]
+            passage = bible.doPassageQuery(ref)
+            while passage[-1] == '':  # pythony way to reference last element of the list
+                passage = passage[:len(passage)-1]
 
-            # Reference may have been hilighted using right-to-left mouse motion
-            # and we want to use the right-most point of the region to start
-            # adding text
-
-            for line in pssge:
+            # Reference may have been highlighted using right-to-left mouse motion
+            # and we want to use the right-most point of the region to start adding text
+            for line in passage:
                 end = end + self.view.insert(edit, end, "> " + line + "  \n")
             end = end + self.view.insert(edit, end, "\n") # Add a space between references
         # Place the buffer at the end of the new text, and center the view
@@ -47,46 +53,18 @@ class DiathekeImportCommand(sublime_plugin.TextCommand):
 class DiathekeSession:
 
     def doPassageQuery(self, refTxt):
-        P = []
-        P.append(['<lb type="x-begin-paragraph"/>', '(br)'])
-        P.append(['<lb subType="x-same-paragraph" type="x-begin-paragraph"/>', '(br)'])
-        P.append(['<lb type="x-end-paragraph"/>', '(br)'])
-        P.append(['<l type="x-indent"/>', ' \t'])
-        P.append(['<l type="x-br"/>', '(br)'])
-        P.append(['<q marker="">', ''])
-        P.append(['</q>', ''])
-        P.append(['<milestone marker="&#8220;" type="cQuote"/>', '"'])
-        P.append(['<milestone marker="&#8221;" type="cQuote"/>', '"\\'])
-        P.append(['<q level="1" marker="&#8220;"/>', '"'])
-        P.append(['<q level="1" marker="&#8221;"/>', '"\\'])
-        P.append(['<q level="2" marker="&#8216;"/>', "'"])
-        P.append(['<q level="2" marker="&#8217;"/>', "'"])
-        P.append(['&#8220;', '"'])
-        P.append(['&#8221;', '"\\'])
-        P.append(['&#8216;', "'"])
-        P.append(['&#8217;', "'"])
-        P.append(['&#8212;', '--'])
-        P.append(['(ESV2011)', ''])
-
-        re_str1 = '\s[es]ID\=\"[wx0-9.]+\"'   # Takes care of the eID and sID strings
-        re_str2 = '\<[a-zA-Z0-9=:"/ -]+\>'     # Misc markups that I don't process (just remove)
-
-        argd = "-b ESV2011 -e HTML -k "
+        argd = "-b ESV2011 -f plain -k "
         cmds = "diatheke " + argd + refTxt
 
         text = subprocess.Popen(cmds, shell=True, stdout=subprocess.PIPE).stdout.read()
         text = text.decode("utf-8")
         f = text.split('\n')
 
-        # Do markup replacements and store results in f1
+        # This used to be a bunch of markup replacements - but I found the "-f plain"
+        # switch - so all I do is pull out the translation designation
         f1 = []
         for line in f:
-            a = re.findall(re_str1, line)
-            for instance in a:
-                line = line.replace(instance, '')
-            for i in range(0, len(P)):
-                line = line.replace(P[i][0], P[i][1])
-            line = re.sub(re_str2, '', line)
+            line = line.replace('(ESV2011)', '')
             f1.append(line)
 
         # Only want verse numbers if book and chapter haven't change
@@ -102,7 +80,7 @@ class DiathekeSession:
 
         # Want consecutive verses in paragraphs if no hard-coded
         # breaks are at the end of the verse
-        f3 = []
+        passage = []
         new_para = ''
         for line in f2:
             if line.find('\\') > -1:
@@ -111,8 +89,8 @@ class DiathekeSession:
                 new_para = new_para + ' ' + line
                 new_para = new_para.lstrip()
                 new_para = re.sub('[ ]+', ' ', new_para)  # Reduce multiple spaces to one
-                f3.append(new_para)
-                f3.append('')
+                passage.append(new_para)
+                passage.append('')
                 new_para = ''
                 last_write = int(1)
             else:
@@ -122,19 +100,7 @@ class DiathekeSession:
         if not last_write:
             new_para = new_para.strip()
             new_para = re.sub('[ ]+', ' ', new_para)  # Reduce multiple spaces to one
-            f3.append(new_para)
-            f3.append('')
+            passage.append(new_para)
+            passage.append('')
 
-        # Some newlines may have been introduced in markup replacements (e.g x-br) - add
-        # these:
-        passage = []
-        for line in f3:
-            line_split = line.split('(br)')
-            for new_line in line_split:
-                passage.append(new_line.strip(' '))
         return passage
-
-        # passage = []
-        # for line in f3:
-        #     passage = passage + line.split('(br)')
-        # return passage
