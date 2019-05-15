@@ -6,6 +6,15 @@ import shutil
 import datetime
 import json
 
+# 14 May 2019
+# Add in ability to handle priorities - note that it looks like priorities
+# are removed from completed tasks, so I only need to process if the task
+# is open
+
+# 14 May 2019
+# Added in sorting - priorities come first, then sort by staleness - need to 
+# do this in two steps because the `reverse=True` should only be on the staleness
+
 # 26 Apr 2019
 # Add in context for lines that have it - wanted for "summary" board that 
 # puts meta-project (GPX2, D209) in as context.
@@ -60,6 +69,7 @@ f.close()
 
 # Some patterns used in searches
 datePattern = re.compile("[0-9-]+")
+priPattern = re.compile("\([A-D]\)")
 projPattern = re.compile(" \+[a-zA-Z0-9]+")
 statePattern = re.compile(" s\:[a-zA-Z0-9]+")
 contextPattern = re.compile(" \@[a-zA-Z0-9]+")
@@ -84,12 +94,18 @@ for line in tasks:
     if line[0:2]=='x ':
         state = closedState
         line = line[2:]
-        datec = datePattern.findall(line)[0]
+        datec = datePattern.findall(line)[0] # Date closed
         line = line[(len(datec)+1):]
     
     # Now the rest of the tasks (as well as completed
     # tasks that haven't been full parsed
-    dateo = datePattern.findall(line)[0]
+    pri = priPattern.findall(line)
+    if pri == []:
+        pri = '-' 
+    else:
+        pri = pri[0]
+        line = line[(len(pri)+1):]
+    dateo = datePattern.findall(line)[0] # Date opened
     line = line[(len(dateo)+1):]
 
     # 26 Apr 2019 if there is a project it will provide
@@ -127,10 +143,16 @@ for line in tasks:
         date2 = datetime.date(int(date2[0]),int(date2[1]),int(date2[2]))
     else:
         date2 = datetime.date.today()  
-    days = '(' + str( (date2-date1).days ) + ')'
+    days = (date2-date1).days # 14 May 2019 - leave this non-string to support sorting
 
-    taskArray.append({'task': task, 'project': proj, 'context': context, 
+    taskArray.append({'pri': pri, 'task': task, 'project': proj, 'context': context, 
         'state': state, 'startDate': dateo, 'endDate': datec, 'days': days})
+
+
+# Sort the task list with high priority first, followed by age
+taskArray = sorted(taskArray, key = lambda i: i['days'], reverse=True)
+taskArray = sorted(taskArray, key = lambda i: i['pri'])
+
 
 ## Set up the HTML preamble
 new_file.write('<!DOCTYPE html>\n')

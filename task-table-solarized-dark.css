@@ -53,3 +53,6 @@ table.task td.proj {
 table.task td.days {
   color: #b58900;
 }
+table.task td.pri {
+  color: #ff0000;
+}

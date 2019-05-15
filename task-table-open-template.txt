@@ -5,7 +5,9 @@
             <tr><td class="proj">$project</td>
                 <td class="proj">$context</td>
             </tr
-            <tr><td colspan="2"><small>$state</small></td></tr>
+            <tr><td><small>$state</small></td>
+                <td class="pri">$pri</td>
+            </tr>
             <tr><td><small>$startDate</small></td>
                 <td class="days"><small>$days</small></td>
             </tr>
