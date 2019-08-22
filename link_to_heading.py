@@ -14,6 +14,10 @@ from User.slugify import slugify
 # create a link with that line; otherwise, generate a drop-down
 # list of headers in the file to select from.
 
+# 22 Aug 2019 - Added logic to check to see if we are on a new line
+# (selection is empty). Also if we are not on a header (i.e., we have 
+# used the drop down) then go ahead and do "paste_wiki_link")
+
 
 class LinkToHeadingCommand(sublime_plugin.TextCommand):
 
@@ -24,12 +28,21 @@ class LinkToHeadingCommand(sublime_plugin.TextCommand):
         self.view.run_command("generate_wiki_link",
             {"args": {'text': self.list[index]}})
 
+        # If this is not on a header line, then we have grabbed a link
+        # from the drop down so do the "paste_wiki_link".
+
+        sel = self.view.sel()[0]
+        text = self.view.substr(self.view.line(sel))
+        if (text == '') or (text[0] != "#"):
+            self.view.run_command("paste_wiki_link")
+
+
     def run(self, edit):
         # First see if we are in a header - if so, use it; otherwise
         # generate a list of all links and call the quick panel
         sel = self.view.sel()[0]
         text = self.view.substr(self.view.line(sel))
-        if text[0] == "#":
+        if (text != '') and (text[0] == "#"):
             self.view.run_command("generate_wiki_link",
             {"args": {'text': text}})
         else:
@@ -51,7 +64,4 @@ class GenerateWikiLink(sublime_plugin.TextCommand):
         else:
             slugName = slugify(linkName, '-')
         outStr = linkName + '|' + fileName + '|' + slugName
-        # print(linkName)
-        # print(slugName)
-        # print(outStr)
         sublime.set_clipboard(outStr)
