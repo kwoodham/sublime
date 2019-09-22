@@ -3,18 +3,21 @@
 import sys
 import os
 
+# 9/22/2019 - sometimes additional switches are placed in the header, so
+# just match on the part of the header that doesn't change
+
 def stripToc(input):
 
     # Assume input list split at lines
 
-    str_beg = '<!-- MarkdownTOC -->'
+    str_beg = '<!-- MarkdownTOC'
     str_end = '<!-- /MarkdownTOC -->'
 
     b = []
     toc = False
 
     for line in input:
-        if line == str_beg:
+        if line[:len(str_beg)] == str_beg:
             toc = True
         elif line == str_end:
             toc = False
