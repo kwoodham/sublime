@@ -24,6 +24,12 @@ import os
 # 
 # Also added "." back into re so that string would match what MarkdownTOC 
 # generates (with "." removed from matching pattern) as well as pandoc.
+#
+# change to stock slugify:
+# \s in first re.sub would strip out periods, so change search to [_ .-]
+# 
+# second re.sub - prepends the separator - makes to sub look like [-\\s]
+# here, the \s is a space
 
 
 
