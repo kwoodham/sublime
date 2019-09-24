@@ -12,9 +12,9 @@ def get_esv_text(passage):
         'q': passage,
         'include-headings': False,
         'include-footnotes': False,
-        'include-verse-numbers': False,
+        'include-verse-numbers': True,
         'include-short-copyright': False,
-        'include-passage-references': False
+        'include-passage-references': True
     }
 
     headers = {
@@ -24,7 +24,12 @@ def get_esv_text(passage):
     response = requests.get(API_URL, params=params, headers=headers)
 
     passages = response.json()['passages']
-    return passages[0].strip() if passages else 'Error: Passage not found'
+
+    passage = passages[0].strip()
+    if params['include-verse-numbers']:
+        passage = passage.replace('[','(')
+        passage = passage.replace(']',')')
+    return passage
 
     # return response.json()
 
