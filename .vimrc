@@ -15,6 +15,7 @@ Plugin 'tpope/vim-sensible'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'dhruvasagar/vim-table-mode'
+"Plugin 'vim-pandoc/vim-criticmarkup'
 
 Plugin 'alok/notational-fzf-vim'
 
@@ -45,7 +46,26 @@ let @o = 'yaw:e "*.md'
 let @r = "0Y:.!esvget.py  \"\<BS>\<CR>"
 
 " Macro to make word **bold**
-let @b = 'bi**ea**'
+" let @b = 'bi**ea**'
+
+" Macro to make visual selection **bold**
+let @b = "A**`<i**"
 
 " Macro to make word _italics_
-let @i = 'bi_ea_'
+" let @i = 'bi_ea_'
+
+" Macro to make visual selection _italics_
+let @i = "A_`<i_"
+
+" Macro to quote the visual mode selection
+let @- = ':s/^/> /g'
+
+" Macro to bulletize the visual mode selection
+let @- = ':s/^/- /g'
+
+" Macro to use Critic Markup highlight of visual selection
+let @h = "A==}`<i{=="
+
+" Macro to insert a Critic Markup comment
+let @c = "i{>><<}hhi"
+
