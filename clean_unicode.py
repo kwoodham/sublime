@@ -3,6 +3,7 @@ import sublime
 
 # See https://www.ascii.cl/htmlcodes.htm
 # 23 Oct 2017
+# Revised 29 June 2020
 
 
 class CleanUnicodeCommand(sublime_plugin.TextCommand):
@@ -22,7 +23,13 @@ class CleanUnicodeCommand(sublime_plugin.TextCommand):
         a[8230] = "..."
         a[8482] = "(TM)"
         for key, value in a.items():
-            # print("Searching for: " + chr(key) + "\n")
-            locations = self.view.find_all(chr(key))
-            for b in locations:
-                self.view.replace(edit, b, value)
+            # 20200626 do this one at a time, as location of next instance shifts if 
+            # the previous substitution was multi-character (such as "(C)").
+            loc = self.view.find(chr(key), 0)
+            count = 0
+            while loc:
+                loc = self.view.find(chr(key), 0)
+                if loc: 
+                    self.view.replace(edit, loc, value)
+                    count += 1
+            print("processing " + chr(key) + ": found " + str(count) + " instances.")
