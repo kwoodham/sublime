@@ -77,6 +77,7 @@ if __name__ == '__main__':
     PDOPTS.append('--standalone')
     PDOPTS.append('--columns=10000')  # https://github.com/jgm/pandoc/issues/2574
     PDOPTS.append('--include-in-header=' + os.path.expanduser('~') + '/css/markdown.css')
+    PDOPTS.append('--strip-comments') # take HTML <!-- comments -->
 
     if (args.bib):
         PDOPTS.append('--bibliography=' + args.bib + ' --csl ieee')
