@@ -22,7 +22,7 @@ import pypandoc
 import argparse
 import sys
 import re
-import os.path
+import os
 from strip_toc import stripToc
 from add_anchors import addAnchors
 
@@ -114,6 +114,11 @@ if __name__ == '__main__':
     out_text = addAnchors(out_text)
 
     out_text = '\n'.join(out_text)
+
+    # 9/22/2020
+    # Want to start adding modification tag to bottom of the page
+    cmd_str = "date -d @`stat --format=%Y " +  args.input.name + "`"
+    out_text += "\n\n---\n\n``Modified: " +  os.popen(cmd_str).read() + "``"
 
     print('Creating ' + args.output + '...')
     out_html = pypandoc.convert_text(
