@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 
 html { 
   font-size: 100%; 
@@ -41,6 +41,9 @@ body{
   font-size:12px;
   line-height:1.5em;
   background:#fefefe;
+  /* 20201207 Seems like ST3 is picking up some default CSS before this file that contains max-width */
+  /* that is limiting what width can be set to. Reset max-width here to allow my value for width */
+  max-width: 60em;
   /* Default here was 45 - 55 fits half screen better */
   width: 55em;
   margin: 10px auto;
@@ -140,8 +143,34 @@ dd { margin: 0 0 0 2em; }
 
 img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
 
-table { border-collapse: collapse; border-spacing: 0; }
-td { vertical-align: top; }
+/* table { border-collapse: collapse; border-spacing: 0; } */
+table td { vertical-align: top; }
+
+/* From: https://stackoverflow.com/a/27327724/4385974 */
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 24px;
+    border-spacing: 0;
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+}
+table th {
+    padding: 3px 10px;
+    background-color: white;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid black;
+}
+table td {
+    padding: 3px 10px;
+    border-top: none;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+}
 
 @media only screen and (min-width: 480px) {
 body{font-size:14px;}
