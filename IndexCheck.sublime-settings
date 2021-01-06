@@ -1,4 +1,4 @@
 {
   "add_orphan_list": true,
-  "ignore_exts": [".html", ".tex", ".out", ".aux", ".log"]
+  "ignore_exts": [".html", ".tex", ".out", ".aux", ".log", ".py", ".bak", ".pickle", ".files", ".sh", ".*~"]
 }

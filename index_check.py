@@ -3,6 +3,9 @@ import sublime
 import os
 import glob
 
+# 06 Jan 2019 - use os.path.splitext() to get extension. This returns
+# ".bak" for "file.this.bak" when "." based search would not.
+
 # 13 Jan 2016 - running into issues when there is an acronym definition
 # in-line with the link, such as the table in the projects index.md:
 #
@@ -95,8 +98,8 @@ class IndexCheckCommand(sublime_plugin.TextCommand):
             print('file is: ' + a)
             if not (a in files_loc):
                 if (a != 'index.md' and
-                        not a.startswith('~') and
-                        not (a[a.find("."):] in ignore_exts)):
+                        not a.startswith('~') and 
+                        not (os.path.splitext(a)[1] in ignore_exts)):
                     orphans.append(a)
 
         print('\nYou have ' + str(len(widows)) + ' widows (bad links):\n')
