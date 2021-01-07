@@ -1,5 +1,6 @@
 import sublime_plugin
 from User.slugify import slugify
+from User.form_index import formIndexProc
 import re
 import os
 
@@ -13,8 +14,11 @@ import os
 # 30 Mar 2016 - update: if namespace subdirectory doesn't exist, create it. If index file
 # doesn't exist, create it with the top level heading.
 #
-# 08 Apr 2016 - update: add in sigutation where text could be highlighted and it would be
+# 08 Apr 2016 - update: add in situation where text could be highlighted and it would be
 # used to generate the namespace.
+#
+# 07 Jan 2021 - use new procedure from form_index to go ahead and place the wiki index
+# into the new index file created as a subtopic.
 
 class CreateSubtopic(sublime_plugin.TextCommand):
 
@@ -41,7 +45,13 @@ class CreateSubtopic(sublime_plugin.TextCommand):
         wd = wd.replace("\\", "/") + "/" + slugify(txt, "-")
         if not os.path.exists(wd):
             os.makedirs(wd)
-        if not os.path.exists(wd + "/index.md"):
-            f = open(wd + "/index.md", 'w', encoding='utf-8')
-            f.write("# " + txt + "\n")
+
+        file_arg = wd + "/index.md"
+        proj_arg = self.view.window().project_data()
+        outStr = formIndexProc(file_arg, proj_arg)
+
+        if not os.path.exists(file_arg):
+            f = open(file_arg, 'w', encoding='utf-8')
+            f.write("# " + txt + "\n\n")
+            f.write(outStr)
             f.close()
