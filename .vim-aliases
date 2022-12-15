@@ -1,0 +1,8 @@
+" https://jovica.org/posts/vim_abbreviations/
+iabbrev mos MoSSEC
+iabbrev <expr> ddd strftime('%c')
+
+" Use jj to exit insert mode. If this doesn't 
+" work out consider https://github.com/zhou13/vim-easyescape/
+
+inoremap jj <Esc>
