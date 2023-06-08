@@ -1,4 +1,12 @@
-#!/bin/python
+#!/mingw64/bin/python
+
+# 6/8/2023
+# MingW64 had trouble with timestamp popen() - so implemented different
+# method to put modification time at end of file
+
+# 6/7/2023
+# Use re on out_html to change \r\n to \n. This took double spaced lines out of output
+# which had the effect of including the extra lines in codeblocks.
 
 # 4/25/2019
 # Use top heading to name page in browser
@@ -20,6 +28,7 @@
 
 import pypandoc
 import argparse
+import datetime
 import sys
 import re
 import os
@@ -117,16 +126,18 @@ if __name__ == '__main__':
 
     # 9/22/2020
     # Want to start adding modification tag to bottom of the page
-    cmd_str = "date -d @`stat --format=%Y " +  args.input.name + "`"
-    out_text += "\n\n---\n\n``Modified: " +  os.popen(cmd_str).read() + "``"
+    # cmd_str = "date -d @`stat --format=%Y " +  args.input.name + "`"
+    # out_text += "\n\n---\n\n``Modified: " +  os.popen(cmd_str).read() + "``"
+    # 6/8/2023 - doesn't seem to be working on MinW64 - following seems to 
+    # be a reasonable replacement
+    p = datetime.datetime.fromtimestamp(os.path.getmtime(args.input.name))
+    out_text += "\n\n---\n\n``Modified: " +  p.ctime() + "``"
 
     print('Creating ' + args.output + '...')
     out_html = pypandoc.convert_text(
         out_text,
         to='html5', format='md', extra_args=PDOPTS)
-
-    # It appears that pandoc no longer puts in `<style type="text/css">' line,
-    # so just print out to file
-    f = open(args.output, 'w', encoding='utf-8')
+    out_html = re.sub('\r\n', '\n', out_html) # 202306607 - finally got rid of double spacing
+    f = open(args.output, 'w', encoding='UTF-8')
     f.write(out_html)
     f.close()
