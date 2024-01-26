@@ -64,5 +64,10 @@ if os.name == 'nt':
     winsound.Beep(880, 500)
     time.sleep(0.5)
     winsound.Beep(1760, 1000)
+# 20240126 Added in version for Termux
+# https://github.com/kindlychung/pybeep
+elif os.name == 'posix':
+    from pybeep.pybeep import PyBeep
+    PyBeep().beepn(3)
 else:
     print("\nTime!", '\a')
